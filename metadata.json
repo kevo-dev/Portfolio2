@@ -1,0 +1,8 @@
+{
+  "name": "Kev O'Wino - Modern Portfolio",
+  "description": "A high-performance, polished developer portfolio featuring a Bento-style project showcase, interactive skill visualizations, and a Gemini-powered AI assistant.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
