@@ -14,6 +14,10 @@
             font-family: 'Inter', sans-serif;
             background-color: #030712;
             color: #f9fafb;
+            overflow-x: hidden;
+        }
+        section {
+            scroll-margin-top: 6rem;
         }
         .mono { font-family: 'JetBrains+Mono', monospace; }
         .glass {
@@ -38,6 +42,13 @@
         }
         ::-webkit-scrollbar-thumb:hover {
             background: #374151;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
         }
     </style>
 <script type="importmap">

@@ -10,6 +10,14 @@ export interface Project {
   featured?: boolean;
 }
 
+export interface BlogPost {
+  title: string;
+  summary: string;
+  url: string;
+  date: string;
+  category: string;
+}
+
 export interface Skill {
   name: string;
   category: 'Frontend' | 'Backend' | 'DevOps' | 'Tools';
@@ -25,6 +33,7 @@ export enum SectionId {
   Hero = 'hero',
   About = 'about',
   Projects = 'projects',
+  Blog = 'blog',
   Skills = 'skills',
   Contact = 'contact'
 }
