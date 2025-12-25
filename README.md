@@ -1,20 +1,41 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Kev O'Wino - Senior Full-Stack Portfolio
 
-# Run and deploy your AI Studio app
+A high-performance, AI-integrated developer portfolio built with **Next.js 15**, **React 19**, and the **Gemini 3 API**.
 
-This contains everything you need to run your app locally.
+## 🚀 Key Features
 
-View your app in AI Studio: https://ai.studio/apps/drive/1Adqq3EthUzpgEkWpcsjFQ51twykhsFFl
+- **Next.js App Router**: Optimized routing and server-side rendering.
+- **AI-Powered Journal**: Dynamic technical blog synthesized from real-time news via Gemini.
+- **Kev-AI Assistant**: Interactive chat interface for technical inquiries.
+- **Bento-style UI**: Modern, glassmorphic project showcase.
+- **Technical SEO**: Fully optimized with Metadata API and JSON-LD Structured Data.
 
-## Run Locally
+## 🛠 Tech Stack
 
-**Prerequisites:**  Node.js
+- **Framework**: [Next.js 15](https://nextjs.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Intelligence**: [Google Gemini API](https://ai.google.dev/)
+- **Charts**: [Recharts](https://recharts.org/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
 
+## 📦 Getting Started
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1. **Install Dependencies**:
+   ```bash
+   yarn install
+   ```
+
+2. **Set Environment Variables**:
+   Create a `.env.local` file and add your Gemini API key:
+   ```env
+   API_KEY=your_gemini_api_key
+   ```
+
+3. **Run Development Server**:
+   ```bash
+   yarn dev
+   ```
+
+## 🌐 Deployment
+
+This project is configured for one-click deployment to **Vercel**. Ensure you add the `API_KEY` to your Vercel project environment variables.

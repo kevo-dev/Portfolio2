@@ -9,7 +9,7 @@ export const PROJECTS: Project[] = [
     tags: ['React', 'Next.js', 'Stripe', 'Node.js'],
     imageUrl: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&q=80&w=1200',
     link: '#',
-    github: '#',
+    github: 'https://github.com/kevo-dev',
     featured: true
   },
   {
@@ -19,7 +19,7 @@ export const PROJECTS: Project[] = [
     tags: ['Python', 'TensorFlow', 'React', 'FastAPI'],
     imageUrl: 'https://images.unsplash.com/photo-1504813184591-01592fd03cfd?auto=format&fit=crop&q=80&w=1200',
     link: '#',
-    github: '#',
+    github: 'https://github.com/kevo-dev',
     featured: true
   },
   {
@@ -29,7 +29,7 @@ export const PROJECTS: Project[] = [
     tags: ['Vue', 'D3.js', 'WebSockets', 'Firebase'],
     imageUrl: 'https://images.unsplash.com/photo-1621761191319-c6fb62004040?auto=format&fit=crop&q=80&w=1200',
     link: '#',
-    github: '#'
+    github: 'https://github.com/kevo-dev'
   },
   {
     id: '4',
@@ -38,7 +38,7 @@ export const PROJECTS: Project[] = [
     tags: ['TypeScript', 'GraphQL', 'PostgreSQL'],
     imageUrl: 'https://images.unsplash.com/photo-1540350394557-8d14678e7f91?auto=format&fit=crop&q=80&w=1200',
     link: '#',
-    github: '#'
+    github: 'https://github.com/kevo-dev'
   }
 ];
 
@@ -60,8 +60,10 @@ export const BIO = {
   about: "I'm a passionate full-stack developer with over 5 years of experience building scalable web applications. My expertise lies in creating seamless user experiences through modern technologies and robust architecture. I love solving complex problems and contributing to open-source projects.",
   email: "hello@kevowino.dev",
   socials: {
-    github: "https://github.com/kevowino",
-    linkedin: "https://linkedin.com/in/kevowino",
-    twitter: "https://twitter.com/kevowino"
+    github: "https://github.com/kevo-dev",
+    linkedin: "https://www.linkedin.com/in/kevowino/",
+    twitter: "https://x.com/non_entity2",
+    facebook: "https://web.facebook.com/profile.php?id=61559376932399",
+    instagram: "https://www.instagram.com/kevowino/"
   }
 };
