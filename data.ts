@@ -7,7 +7,7 @@ export const PROJECTS: Project[] = [
     title: 'E-Commerce Nexus',
     description: 'A high-performance marketplace with real-time inventory management and global payment gateway integration.',
     tags: ['React', 'Next.js', 'Stripe', 'Node.js'],
-    imageUrl: 'https://picsum.photos/seed/shop/800/600',
+    imageUrl: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&q=80&w=1200',
     link: '#',
     github: '#',
     featured: true
@@ -17,7 +17,7 @@ export const PROJECTS: Project[] = [
     title: 'HealthTrack AI',
     description: 'Predictive health analytics dashboard using machine learning to monitor patient vital signs.',
     tags: ['Python', 'TensorFlow', 'React', 'FastAPI'],
-    imageUrl: 'https://picsum.photos/seed/health/800/600',
+    imageUrl: 'https://images.unsplash.com/photo-1504813184591-01592fd03cfd?auto=format&fit=crop&q=80&w=1200',
     link: '#',
     github: '#',
     featured: true
@@ -27,7 +27,7 @@ export const PROJECTS: Project[] = [
     title: 'Crypto Pulse',
     description: 'Real-time cryptocurrency tracking platform with sentiment analysis from social media feeds.',
     tags: ['Vue', 'D3.js', 'WebSockets', 'Firebase'],
-    imageUrl: 'https://picsum.photos/seed/crypto/800/600',
+    imageUrl: 'https://images.unsplash.com/photo-1621761191319-c6fb62004040?auto=format&fit=crop&q=80&w=1200',
     link: '#',
     github: '#'
   },
@@ -36,7 +36,7 @@ export const PROJECTS: Project[] = [
     title: 'TaskFlow OS',
     description: 'A collaborative productivity suite designed for remote engineering teams with Kanban and Gantt views.',
     tags: ['TypeScript', 'GraphQL', 'PostgreSQL'],
-    imageUrl: 'https://picsum.photos/seed/task/800/600',
+    imageUrl: 'https://images.unsplash.com/photo-1540350394557-8d14678e7f91?auto=format&fit=crop&q=80&w=1200',
     link: '#',
     github: '#'
   }

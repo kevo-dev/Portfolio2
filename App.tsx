@@ -84,9 +84,9 @@ const App: React.FC = () => {
                 <div className="relative group">
                   <div className="absolute -inset-4 bg-indigo-500/10 rounded-3xl blur-2xl group-hover:bg-indigo-500/20 transition-colors" />
                   <img 
-                    src="https://picsum.photos/seed/kev/800/1000" 
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800" 
                     alt="Profile" 
-                    className="relative z-10 rounded-2xl shadow-2xl grayscale hover:grayscale-0 transition-all duration-500"
+                    className="relative z-10 rounded-2xl shadow-2xl grayscale hover:grayscale-0 transition-all duration-500 w-full object-cover aspect-[4/5]"
                   />
                 </div>
                 
