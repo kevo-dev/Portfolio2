@@ -1,4 +1,23 @@
 
+export interface Comment {
+  id: string;
+  userName: string;
+  text: string;
+  timestamp: string;
+}
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  summary: string;
+  content?: string;
+  url: string;
+  date: string;
+  category: string;
+  likes: number;
+  comments: Comment[];
+}
+
 export interface Project {
   id: string;
   title: string;
@@ -8,14 +27,6 @@ export interface Project {
   link: string;
   github?: string;
   featured?: boolean;
-}
-
-export interface BlogPost {
-  title: string;
-  summary: string;
-  url: string;
-  date: string;
-  category: string;
 }
 
 export interface Skill {

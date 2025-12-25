@@ -60,8 +60,8 @@ export const BIO = {
   about: "I'm a passionate full-stack developer with over 5 years of experience building scalable web applications. My expertise lies in creating seamless user experiences through modern technologies and robust architecture. I love solving complex problems and contributing to open-source projects.",
   email: "hello@kevowino.dev",
   socials: {
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
-    twitter: "https://twitter.com"
+    github: "https://github.com/kevowino",
+    linkedin: "https://linkedin.com/in/kevowino",
+    twitter: "https://twitter.com/kevowino"
   }
 };

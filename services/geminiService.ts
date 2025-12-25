@@ -6,9 +6,9 @@ import { BlogPost } from "../types";
 const API_KEY = process.env.API_KEY;
 
 const SYSTEM_INSTRUCTION = `
-You are "Kev-AI", the virtual assistant for Kev O'Wino's portfolio website. 
+You are "Kev-AI", the virtual assistant and lead editor for Kev O'Wino's portfolio. 
 Kev is a Full-Stack Software Engineer.
-Your tone is professional, helpful, slightly witty, and enthusiastic.
+Your tone is professional, authoritative, slightly witty, and highly technical.
 Use the following context to answer questions:
 - Biography: ${BIO.about}
 - Role: ${BIO.role}
@@ -36,6 +36,7 @@ export const getGeminiResponse = async (userMessage: string) => {
         temperature: 0.7,
         topP: 0.95,
         maxOutputTokens: 500,
+        thinkingConfig: { thinkingBudget: 100 },
       },
     });
 
@@ -46,19 +47,28 @@ export const getGeminiResponse = async (userMessage: string) => {
   }
 };
 
-export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
-  if (!API_KEY) return [];
-
+export const getFullArticleContent = async (title: string, summary: string, url: string) => {
+  if (!API_KEY) return "Content unavailable.";
   const ai = new GoogleGenAI({ apiKey: API_KEY });
-  const prompt = `Research the top 5 most important and recent engineering/web development news stories or technical trends for today. 
-  Focus on React, TypeScript, AI in coding, and Cloud Architecture. 
-  For each story, provide:
-  1. A catchy title.
-  2. A 2-sentence summary.
-  3. The current date.
-  4. A category tag.
   
-  Return the information in a clear list. I will also use your search grounding chunks to provide the actual URLs.`;
+  const prompt = `Act as a Senior Lead Engineer and Technical Columnist. 
+  Your goal is to produce a high-fidelity, fully rewritten technical deep-dive based on the topic: "${title}".
+  
+  Initial Topic Summary: "${summary}"
+  Primary Source: ${url}
+  
+  STRICT EDITORIAL REQUIREMENTS:
+  1. **Multi-Source Research**: Use your tools to find at least 2-3 additional technical perspectives or recent developments related to this topic. Synthesize these into a cohesive narrative.
+  2. **Total Content Rewrite**: Do not summarize. Rewrite from the ground up using a sophisticated, analytical voice. Use technical terminology correctly (e.g., talk about 'hydration strategies', 'O(n) complexity', 'distributed state', etc.)
+  3. **Opinionated Commentary**: You MUST include a section titled "## Kev's Engineering Perspective". In this section, provide a critical analysis of the tech. Discuss trade-offs, potential "hype-cycle" pitfalls, and how a senior engineer should actually evaluate this.
+  4. **Structure**:
+     - **The Lead**: A punchy, insightful opening.
+     - **The Landscape**: Synthesis of current trends and multiple source perspectives.
+     - **Technical Deep-Dive**: How it actually works under the hood.
+     - **Kev's Engineering Perspective**: Bold, expert-level commentary and personal "hot takes".
+     - **The Bottom Line**: A concluding summary.
+  
+  Format in clean, professional Markdown. Use bolding for emphasis and code blocks for technical examples if applicable.`;
 
   try {
     const response = await ai.models.generateContent({
@@ -66,6 +76,37 @@ export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
       contents: prompt,
       config: {
         tools: [{ googleSearch: {} }],
+        temperature: 0.85,
+        topP: 0.95,
+      },
+    });
+    return response.text || "Failed to expand article content.";
+  } catch (err) {
+    console.error("Expansion error:", err);
+    return "The content could not be generated at this time.";
+  }
+};
+
+export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
+  if (!API_KEY) return [];
+
+  const ai = new GoogleGenAI({ apiKey: API_KEY });
+  const prompt = `Research the top 5 most consequential and debatable engineering news stories for today. 
+  Focus on areas where there is active technical discussion or controversy in the React, TypeScript, AI Engineering, or Cloud Native ecosystems.
+  
+  For each story, provide:
+  1. A provocative, professional title.
+  2. A 2-sentence analytical summary.
+  3. The current date.
+  4. A specific technical category.
+  
+  Return as a JSON array.`;
+
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: prompt,
+      config: {
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.ARRAY,
@@ -84,21 +125,17 @@ export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
     });
 
     const baseData = JSON.parse(response.text || "[]") as any[];
-    const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
-
-    // Map the JSON data to our BlogPost interface, pairing with URLs from grounding if available
-    return baseData.map((item, index) => {
-      // Find a relevant URI from the grounding chunks
-      const sourceUri = groundingChunks[index]?.web?.uri || 
-                        groundingChunks[0]?.web?.uri || 
-                        "https://news.ycombinator.com";
-
+    
+    return baseData.map((item) => {
       return {
+        id: Math.random().toString(36).substr(2, 9),
         title: item.title,
         summary: item.summary,
         date: item.date,
         category: item.category,
-        url: sourceUri
+        url: "https://news.ycombinator.com",
+        likes: Math.floor(Math.random() * 50) + 10,
+        comments: []
       };
     });
   } catch (error) {
