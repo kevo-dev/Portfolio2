@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect, Component, ErrorInfo, ReactNode } from 'react';
@@ -12,8 +13,8 @@ interface State {
   hasError: boolean;
 }
 
-// Fixed ErrorBoundary by using React.Component explicitly to ensure props type inference works correctly
-class ErrorBoundary extends React.Component<Props, State> {
+// Fixed ErrorBoundary by using the imported Component class directly to ensure property inheritance and type inference for 'props' are correctly resolved
+class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false
   };
@@ -49,7 +50,7 @@ class ErrorBoundary extends React.Component<Props, State> {
       );
     }
 
-    // this.props.children is now correctly inferred through the generic React.Component extension
+    // Accessing children from props, which is inherited from the Component base class
     return this.props.children;
   }
 }

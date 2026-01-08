@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -8,7 +7,11 @@ import AIAssistant from './AIAssistant';
 import { PROJECTS, SKILLS, BIO } from '../data';
 import { SectionId } from '../types';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Twitter, Instagram, Facebook, ArrowRight, Code, Zap, Globe } from 'lucide-react';
+import { Github, Linkedin, Twitter, Instagram, Facebook, ArrowRight, Zap } from 'lucide-react';
+
+interface HomeViewProps {
+  onNavigate: (view: 'home' | 'blog') => void;
+}
 
 const SocialLinks = () => (
   <div className="flex items-center gap-5">
@@ -36,11 +39,6 @@ const SocialLinks = () => (
   </div>
 );
 
-// Added missing interface definition for HomeView component props
-interface HomeViewProps {
-  onNavigate: (view: 'home' | 'blog') => void;
-}
-
 export default function HomeView({ onNavigate }: HomeViewProps) {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
@@ -54,8 +52,8 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
       <main className="mesh-gradient">
         {/* Hero Section */}
         <section id={SectionId.Hero} className="min-h-screen flex flex-col items-center justify-center px-6 pt-20 relative overflow-hidden">
-          <div className="absolute top-[15%] left-[5%] w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[180px] pointer-events-none animate-pulse" />
-          <div className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[180px] pointer-events-none animate-pulse" />
+          <div className="absolute top-[15%] left-[5%] w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[180px] pointer-events-none" />
+          <div className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[180px] pointer-events-none" />
           
           <div className="max-w-6xl w-full text-center space-y-12 relative z-10">
             <motion.div 
@@ -96,23 +94,13 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
               className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-10"
             >
               <a href={BIO.socials.github} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-12 py-6 bg-white text-black font-black rounded-2xl hover:bg-gray-100 transition-all shadow-[0_30px_60px_rgba(255,255,255,0.15)] active:scale-95 text-center uppercase tracking-widest text-[11px] flex items-center justify-center gap-3">
-                <Github size={18} /> Deep Dive
+                <Github size={18} /> Source Access
               </a>
               <button onClick={() => scrollTo(SectionId.Projects)} className="w-full sm:w-auto px-12 py-6 glass border border-white/10 text-white font-black rounded-2xl hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all active:scale-95 text-center uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 group">
-                Works <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                Portfolio <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
           </div>
-
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.5 }}
-            className="absolute bottom-12 flex flex-col items-center gap-3 text-gray-600 animate-bounce"
-          >
-            <span className="text-[10px] font-black uppercase tracking-[0.5em]">Scroll</span>
-            <div className="w-px h-12 bg-gradient-to-b from-indigo-500 to-transparent" />
-          </motion.div>
         </section>
 
         {/* Identity Section */}
@@ -123,27 +111,15 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="relative group perspective-1000"
+                className="relative group"
               >
                 <div className="absolute -inset-10 bg-indigo-500/5 rounded-[5rem] blur-[120px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                <div className="relative z-10 rounded-[3.5rem] overflow-hidden shadow-2xl border border-white/5 aspect-[4/5] glass p-2 transition-transform duration-700 group-hover:scale-[1.02]">
+                <div className="relative z-10 rounded-[3.5rem] overflow-hidden shadow-2xl border border-white/5 aspect-[4/5] glass p-2 transition-transform duration-700 group-hover:scale-[1.01]">
                   <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-transparent z-20" />
-                  
-                  <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?auto=format&fit=crop&q=80&w=800" alt="Kev Owino" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" />
-                  
-                  <div className="absolute inset-0 pointer-events-none z-25">
-                     <div className="w-full h-full relative">
-                        <div className="absolute top-[34.8%] left-[43.5%] w-2 h-1.5 bg-indigo-500/80 rounded-full blur-[4px] animate-pulse shadow-[0_0_15px_#6366f1] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                        <div className="absolute top-[34.8%] left-[55.2%] w-2 h-1.5 bg-indigo-500/80 rounded-full blur-[4px] animate-pulse shadow-[0_0_15px_#6366f1] [animation-delay:0.3s] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                     </div>
-                  </div>
-
+                  <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?auto=format&fit=crop&q=80&w=800" alt="Kev Owino" className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0" />
                   <div className="absolute bottom-12 left-12 z-30 text-white space-y-1">
                      <h4 className="text-4xl font-black tracking-tighter">Kev Owino</h4>
-                     <div className="flex items-center gap-3">
-                        <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" />
-                        <p className="text-[11px] font-black text-indigo-400 uppercase tracking-[0.3em]">Neural Architect @ Nairobi</p>
-                     </div>
+                     <p className="text-[11px] font-black text-indigo-400 uppercase tracking-[0.3em]">Neural Architect @ Nairobi</p>
                   </div>
                 </div>
               </motion.div>
@@ -186,10 +162,6 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                  </h2>
                  <h3 className="text-7xl md:text-9xl font-black tracking-tighter leading-none">Selected Works</h3>
               </div>
-              <div className="max-w-xs space-y-6">
-                 <p className="text-gray-500 text-lg font-light leading-relaxed">Synthesis of architectural stability and experimental interaction models.</p>
-                 <div className="h-px w-20 bg-indigo-500/50" />
-              </div>
             </div>
             <BentoGrid projects={PROJECTS} />
           </div>
@@ -217,14 +189,13 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                       transition={{ delay: index * 0.05 }}
                       className="glass p-10 rounded-[2.5rem] flex flex-col gap-10 group hover:border-indigo-500/50 transition-all border border-white/5 hover:bg-white/5 overflow-hidden relative"
                     >
-                      <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-600/5 blur-3xl rounded-full -mr-12 -mt-12 group-hover:bg-indigo-600/10 transition-colors" />
-                      <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center font-black text-sm text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-xl">
+                      <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center font-black text-sm text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                         {skill.name.slice(0, 1)}
                       </div>
                       <div className="space-y-4">
                         <span className="text-xs font-black uppercase tracking-[0.2em] text-white">{skill.name}</span>
                         <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
-                           <motion.div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500" initial={{ width: 0 }} whileInView={{ width: `${skill.level}%` }} viewport={{ once: true }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }} />
+                           <motion.div className="h-full bg-indigo-500" initial={{ width: 0 }} whileInView={{ width: `${skill.level}%` }} viewport={{ once: true }} transition={{ duration: 1.5 }} />
                         </div>
                       </div>
                     </motion.div>
@@ -236,12 +207,11 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         </section>
       </main>
 
-      {/* Modern Footer */}
-      <footer className="py-24 px-6 border-t border-white/5 bg-[#010309] relative overflow-hidden">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-16 relative z-10">
+      <footer className="py-24 px-6 border-t border-white/5 bg-[#010309] relative">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-16">
           <div className="flex flex-col gap-8 items-center md:items-start">
              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-indigo-600 rounded-[1.2rem] flex items-center justify-center font-black text-white text-sm shadow-2xl shadow-indigo-600/30">KO</div>
+                <div className="w-14 h-14 bg-indigo-600 rounded-[1.2rem] flex items-center justify-center font-black text-white text-sm">KO</div>
                 <div className="flex flex-col">
                    <p className="text-xs font-black uppercase tracking-[0.4em] text-white">Kev Owino</p>
                    <p className="text-[10px] font-bold text-indigo-500/60 uppercase tracking-widest italic">Digital Architect</p>
@@ -249,14 +219,8 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
              </div>
              <SocialLinks />
           </div>
-          
           <div className="flex flex-col items-center md:items-end gap-3">
-             <div className="flex gap-10 text-gray-500 text-[10px] font-black uppercase tracking-[0.3em] mb-4">
-                <button onClick={() => scrollTo(SectionId.Hero)} className="hover:text-white transition-colors">Identity</button>
-                <button onClick={() => scrollTo(SectionId.Projects)} className="hover:text-white transition-colors">Works</button>
-                <button onClick={() => onNavigate('blog')} className="hover:text-white transition-colors">Journal</button>
-             </div>
-             <p className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">© {new Date().getFullYear()} Kev Owino Portfolio V2.2.0</p>
+             <p className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">© {new Date().getFullYear()} Kev Owino Portfolio</p>
              <p className="text-[9px] font-mono text-indigo-500/30 uppercase tracking-[0.5em] flex items-center gap-2">
                <Zap size={10} /> Synthesized via Gemini 3
              </p>
