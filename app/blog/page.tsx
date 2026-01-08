@@ -5,11 +5,13 @@ import Navbar from '../../components/Navbar';
 import Blog from '../../components/Blog';
 import AIAssistant from '../../components/AIAssistant';
 
-export default function BlogPage() {
-  // Internal navigation for environment compatibility
+interface BlogPageProps {
+  onNavigate: (view: 'home' | 'blog') => void;
+}
+
+export default function BlogPage({ onNavigate }: BlogPageProps) {
   const handleNavigate = (view: 'home' | 'blog') => {
-    if (view === 'home') window.location.hash = '';
-    else window.location.hash = 'blog';
+    onNavigate(view);
   };
 
   return (

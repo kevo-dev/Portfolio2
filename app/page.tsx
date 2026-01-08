@@ -9,16 +9,18 @@ import { SectionId } from '../types';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell } from 'recharts';
 import { motion } from 'framer-motion';
 
-export default function HomePage() {
+interface HomePageProps {
+  onNavigate: (view: 'home' | 'blog') => void;
+}
+
+export default function HomePage({ onNavigate }: HomePageProps) {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Internal navigation for environment compatibility
   const handleNavigate = (view: 'home' | 'blog') => {
-    if (view === 'blog') window.location.hash = 'blog';
-    else window.location.hash = '';
+    onNavigate(view);
   };
 
   return (
