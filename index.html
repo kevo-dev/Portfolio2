@@ -21,6 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <script>
+      // Polyfill process.env for browser environment compatibility
       window.process = window.process || { env: { NODE_ENV: 'production' } };
     </script>
 
@@ -98,6 +99,15 @@
         background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+      }
+
+      .animate-fade-in {
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
       }
     </style>
 </head>
