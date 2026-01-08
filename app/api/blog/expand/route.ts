@@ -7,13 +7,7 @@ export const revalidate = 0;
 export async function POST(req: Request) {
   try {
     const { title, summary, url } = await req.json();
-    const apiKey = process.env.API_KEY;
-
-    if (!apiKey) {
-      return NextResponse.json({ content: "API Key Missing" }, { status: 500 });
-    }
-
-    const ai = new GoogleGenAI({ apiKey });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     const prompt = `Act as a Senior Software Architect. Produce a high-fidelity, technical deep-dive on: "${title}".
     Context: "${summary}"
@@ -22,11 +16,11 @@ export async function POST(req: Request) {
     REQUIREMENTS:
     1. Architectural Analysis: Discuss patterns, performance implications, and scalability.
     2. Section: "## Kev's Engineering Perspective": Provide bold, opinionated commentary on why this matters to modern developers.
-    3. Technical Depth: Use code concepts or architectural diagrams.
+    3. Technical Depth: Use code concepts where relevant.
     4. Format: Clean Markdown.`;
 
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-3-pro-preview",
       contents: prompt,
       config: {
         tools: [{ googleSearch: {} }],

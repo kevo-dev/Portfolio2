@@ -5,17 +5,10 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export async function GET() {
-  const apiKey = process.env.API_KEY;
-  
-  if (!apiKey) {
-    console.error("Critical: API_KEY is missing.");
-    return NextResponse.json({ error: "Configuration Missing" }, { status: 500 });
-  }
-
   try {
-    const ai = new GoogleGenAI({ apiKey });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const prompt = `Research the top 6 most consequential engineering news stories for today. 
-    Focus on React 19, TypeScript 5+, AI Engineering, or Cloud Native architectures.
+    Focus on React, TypeScript, AI Engineering, or Cloud Native architectures.
     Return as a JSON array of objects with title, summary, date, and category.`;
 
     const response = await ai.models.generateContent({

@@ -16,11 +16,7 @@ GitHub: ${BIO.socials.github}
 export async function POST(req: Request) {
   try {
     const { message } = await req.json();
-    const apiKey = process.env.API_KEY;
-    
-    if (!apiKey) throw new Error("API Key Missing");
-
-    const ai = new GoogleGenAI({ apiKey });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
