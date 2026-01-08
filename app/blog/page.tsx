@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import App from '../App';
+import App from '../../App';
 
 /**
  * Next.js requires all files in the app directory to have a valid default export.
