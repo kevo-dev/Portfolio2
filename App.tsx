@@ -1,12 +1,13 @@
 
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import HomePage from './app/page';
-import BlogPage from './app/blog/page';
+import HomeView from './components/HomeView';
+import BlogView from './components/BlogView';
 
 export default function App() {
   const [view, setView] = useState<'home' | 'blog'>('home');
 
-  // Handle hash changes for simple routing
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
@@ -18,30 +19,29 @@ export default function App() {
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    handleHashChange(); // Initial check
+    handleHashChange();
 
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   const navigateTo = (newView: 'home' | 'blog') => {
     setView(newView);
-    window.location.hash = newView === 'blog' ? 'blog' : '';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (newView === 'blog') {
+      window.location.hash = 'blog';
+    } else {
+      window.location.hash = '';
+      // If we're already on home but the hash was #blog, clearing it might not trigger scroll
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   return (
-    <div className="app-container selection:bg-indigo-500/30">
-      {/* Dynamic View Injection */}
+    <div className="min-h-screen">
       {view === 'home' ? (
-        <HomePage onNavigate={navigateTo} />
+        <HomeView onNavigate={navigateTo} />
       ) : (
-        <BlogPage onNavigate={navigateTo} />
+        <BlogView onNavigate={navigateTo} />
       )}
-      
-      {/* Global Scroll Progress */}
-      <div className="fixed top-0 left-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 z-[210] transition-all duration-300" 
-           style={{ width: '0%' }} 
-           id="scroll-progress" />
     </div>
   );
 }
