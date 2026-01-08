@@ -1,88 +1,131 @@
+import { GoogleGenAI, Type } from "@google/genai";
 import { BlogPost } from "../types";
+import { BIO } from "../data";
 
 /**
- * Ensures we hit the root-level API correctly regardless of sub-route.
+ * Direct client-side integration with Gemini.
+ * Uses the platform-injected process.env.API_KEY.
  */
-const getBaseUrl = () => {
-  if (typeof window !== 'undefined') {
-    return window.location.origin;
+const getAI = () => {
+  const apiKey = (window as any).process?.env?.API_KEY || (process as any).env?.API_KEY;
+  if (!apiKey) {
+    throw new Error("API Key not detected in environment.");
   }
-  return '';
+  return new GoogleGenAI({ apiKey });
 };
 
 /**
- * Client-side wrapper for the neural assistant.
- * Proxies requests to /api/chat to protect the API key.
+ * Handles chat interactions with the Kev-AI persona.
  */
-export const getGeminiResponse = async (userMessage: string) => {
+export const getGeminiResponse = async (userMessage: string): Promise<string> => {
   try {
-    const response = await fetch(`${getBaseUrl()}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: userMessage }),
+    const ai = getAI();
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: userMessage,
+      config: {
+        systemInstruction: `You are "Kev-AI", the virtual assistant for Kev Owino. 
+        Tone: Professional, helpful, and technical.
+        Identity: Kev Owino is a self-taught software developer based in Nairobi, Kenya.
+        Background: He built his engineering foundations through freeCodeCamp.
+        Email: ${BIO.email}
+        GitHub: ${BIO.socials.github}
+        Be concise but insightful. Respond with Markdown.`,
+        temperature: 0.7,
+      },
     });
-    
-    if (!response.ok) {
-      console.error(`Gemini Proxy failed: ${response.status}`);
-      return "Neural link sync failed. The node is temporarily offline.";
-    }
-
-    const data = await response.json();
-    return data.text || "Neural link sync failed. Please try again.";
+    return response.text || "Neural link sync failed. Please try again.";
   } catch (error) {
-    console.error("Gemini Proxy Connection Error:", error);
-    return "Service temporarily offline for maintenance.";
+    console.error("Gemini Response Error:", error);
+    return "The neural node is currently recalibrating. Please try again in a moment.";
   }
 };
 
 /**
- * Fetches the latest technical news via the internal API route.
+ * Researches and returns the latest technical blog posts directly.
  */
 export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
   try {
-    // Force no-cache to prevent Vercel from caching 404s or old data
-    const response = await fetch(`${getBaseUrl()}/api/blog/posts`, { 
-      cache: 'no-store',
-      headers: {
-        'Accept': 'application/json'
-      }
+    const ai = getAI();
+    const prompt = `Act as a tech news aggregator for Kev's Journal. Find 6 hot stories in software engineering (React, TypeScript, AI, Cloud) for today.
+    Return the result as a JSON array.`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.ARRAY,
+          items: {
+            type: Type.OBJECT,
+            properties: {
+              title: { type: Type.STRING },
+              summary: { type: Type.STRING },
+              date: { type: Type.STRING },
+              category: { type: Type.STRING },
+            },
+            required: ["title", "summary", "date", "category"]
+          }
+        }
+      },
     });
 
-    if (!response.ok) {
-      console.error(`Blog Fetch failed (${response.status})`);
-      return [];
-    }
+    const text = response.text;
+    if (!text) return [];
 
-    const data = await response.json();
-    return Array.isArray(data) ? data : [];
+    const baseData = JSON.parse(text);
+    return baseData.map((item: any) => ({
+      id: Math.random().toString(36).substr(2, 9),
+      ...item,
+      url: "https://news.ycombinator.com",
+      likes: Math.floor(Math.random() * 100) + 15,
+      comments: []
+    }));
   } catch (error) {
-    console.error("Blog Fetch Proxy Error:", error);
+    console.error("Blog Synthesis Error:", error);
     return [];
   }
 };
 
 /**
- * Deep-dives into a specific post using the internal expansion API.
+ * Generates an in-depth technical expansion for a blog post.
  */
 export const expandBlogPost = async (post: BlogPost): Promise<{ content: string; sources: any[] }> => {
   try {
-    const response = await fetch(`${getBaseUrl()}/api/blog/expand`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: post.title,
-        summary: post.summary,
-        url: post.url
-      }),
-      cache: 'no-store'
-    });
+    const ai = getAI();
+    const prompt = `Conduct a technical deep-dive into the following engineering topic: "${post.title}".
+    Context: "${post.summary}"
     
-    if (!response.ok) throw new Error('Expansion failed');
-    return await response.json();
-  } catch (error) {
-    console.error("Expansion Proxy Error:", error);
+    REQUIREMENTS:
+    1. Architectural considerations (patterns, performance).
+    2. Scalability impact.
+    3. A section titled "## Kev's Engineering Perspective" with opinionated commentary.
+    
+    Use professional technical Markdown. Use Google Search to ensure up-to-date accuracy.`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3-pro-preview",
+      contents: prompt,
+      config: {
+        tools: [{ googleSearch: {} }],
+        temperature: 0.8,
+      },
+    });
+
+    const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
+    const sources = groundingChunks
+      .map((chunk: any) => chunk.web?.uri ? { title: chunk.web.title, uri: chunk.web.uri } : null)
+      .filter(Boolean);
+
     return { 
-      content: "Neural connectivity interrupted during synthesis. Please check back later.", 
+      content: response.text || "Neural synthesis failed to produce content.",
+      sources: sources
+    };
+  } catch (error) {
+    console.error("Blog Expansion Error:", error);
+    return { 
+      content: "Neural connectivity interrupted. Detailed analysis unavailable at this time.", 
       sources: [] 
     };
   }

@@ -14,29 +14,25 @@
     <meta property="og:url" content="https://kevowino.dev/">
     <meta property="og:title" content="Kev Owino | Self-taught Software Developer">
     <meta property="og:description" content="Self-taught software developer specializing in React, Node.js, and modern web architectures.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?auto=format&fit=crop&q=80&w=800">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://kevowino.dev/">
     <meta property="twitter:title" content="Kev Owino | Self-taught Software Developer">
     <meta property="twitter:description" content="Self-taught software developer specializing in React, Node.js, and modern web architectures.">
-    <meta property="twitter:image" content="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800">
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?auto=format&fit=crop&q=80&w=800">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <script>
-      // Robust polyfill for process.env to support Gemini SDK and other Node-style libraries
-      window.process = {
-        env: {
-          NODE_ENV: 'production',
-          API_KEY: '' // This will be injected by the platform environment
-        },
-        cwd: () => '/',
-        browser: true
-      };
+      // Safe polyfill for process.env to support Gemini SDK
+      window.process = window.process || {};
+      window.process.env = window.process.env || {};
+      window.process.env.NODE_ENV = window.process.env.NODE_ENV || 'production';
+      // API_KEY is pre-configured by the environment.
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -101,6 +97,12 @@
         border: 1px solid rgba(255, 255, 255, 0.08);
       }
 
+      .glass-dark {
+        background: rgba(3, 7, 18, 0.8);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
       .mesh-gradient {
         background-color: #030712;
         background-image: 
@@ -123,6 +125,9 @@
       .animate-fade-in {
         animation: fade-in 0.5s ease-out forwards;
       }
+
+      .scrollbar-hide::-webkit-scrollbar { display: none; }
+      .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-[#030712] text-gray-100 selection:bg-indigo-500/30">
