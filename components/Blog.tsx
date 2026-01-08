@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -64,14 +65,14 @@ const Blog: React.FC<BlogProps> = ({ isFullPage = false }) => {
 
     if (selectedPost) {
       updateMetaTags(
-        `${selectedPost.title} | Kev O'Wino Journal`,
+        `${selectedPost.title} | Kev Owino Journal`,
         selectedPost.summary
       );
     } else {
       // Revert to professional baseline
       updateMetaTags(
-        "Kev O'Wino | Senior Full-Stack Engineer",
-        "Specialized in high-performance web applications and AI-driven solutions."
+        "Kev Owino | Self-taught Software Developer",
+        "Self-taught software developer specializing in high-performance web applications and AI solutions."
       );
     }
   }, [selectedPost]);
@@ -99,12 +100,12 @@ const Blog: React.FC<BlogProps> = ({ isFullPage = false }) => {
       setExpanding(true);
       try {
         const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-        const prompt = `Act as a Senior Lead Engineer. Produce a high-fidelity, fully rewritten technical deep-dive on: "${post.title}".
+        const prompt = `Act as a Software Developer. Produce a high-fidelity, fully rewritten technical deep-dive on: "${post.title}".
         Summary: "${post.summary}"
         Source: ${post.url}
         REQUIREMENTS:
         1. Multi-Source Synthesis: Cross-reference this with recent technical trends.
-        2. Section: "## Kev's Engineering Perspective": Provide bold, expert-level commentary on trade-offs and architectural impact.
+        2. Section: "## Kev's Perspective": Provide bold commentary on trade-offs and architectural impact.
         3. Format: Professional Markdown.`;
 
         const response = await ai.models.generateContent({

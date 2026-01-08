@@ -54,10 +54,10 @@ export const SKILLS: Skill[] = [
 ];
 
 export const BIO = {
-  name: "Kev O'Wino",
-  role: "Full-Stack Software Engineer",
+  name: "Kev Owino",
+  role: "Self-taught Software Developer",
   location: "Nairobi, Kenya",
-  about: "I'm a passionate full-stack developer with over 5 years of experience building scalable web applications. My expertise lies in creating seamless user experiences through modern technologies and robust architecture. I love solving complex problems and contributing to open-source projects.",
+  about: "I'm a passionate self-taught software developer dedicated to building scalable web applications and solving complex architectural problems. I first mastered the fundamentals through the freeCodeCamp curriculum and have since committed to continuous learning and contributing back to the open-source community.",
   email: "hello@kevowino.dev",
   socials: {
     github: "https://github.com/kevo-dev",

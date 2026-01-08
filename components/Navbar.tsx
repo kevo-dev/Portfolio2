@@ -62,8 +62,8 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                 <span className="text-white text-[10px] font-black">KO</span>
               </div>
               <div className="flex flex-col text-left">
-                <span className="font-black text-sm text-white tracking-tighter">Kev O'Wino</span>
-                <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest leading-none">Senior Engineer</span>
+                <span className="font-black text-sm text-white tracking-tighter">Kev Owino</span>
+                <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest leading-none">Software Developer</span>
               </div>
             </button>
 
@@ -88,7 +88,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
                 onClick={() => handleAction({ target: 'contact', type: 'scroll' })}
                 className="px-6 py-3 bg-white text-black text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-gray-200 transition-all active:scale-95 shadow-xl shadow-white/5"
               >
-                Hire Node
+                Connect
               </button>
             </div>
 

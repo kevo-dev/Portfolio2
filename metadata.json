@@ -1,6 +1,6 @@
 {
-  "name": "Kev O'Wino - Modern Portfolio",
-  "description": "A high-performance, polished developer portfolio featuring a Bento-style project showcase, interactive skill visualizations, and a Gemini-powered AI assistant.",
+  "name": "Kev Owino - Software Developer",
+  "description": "A high-performance, polished developer portfolio of Kev Owino, a self-taught software developer focused on modern web engineering.",
   "requestFramePermissions": [
     "camera",
     "microphone"

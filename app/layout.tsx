@@ -1,11 +1,12 @@
+
 import React from 'react';
 import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import StructuredData from '../components/StructuredData';
 
 export const metadata: Metadata = {
-  title: "Kev O'Wino | Senior Full-Stack Engineer",
-  description: "Specialized in high-performance web applications and AI-driven solutions.",
+  title: "Kev Owino | Self-taught Software Developer",
+  description: "Self-taught software developer specializing in high-performance web applications and AI-driven solutions.",
 };
 
 export const viewport: Viewport = {
