@@ -1,4 +1,5 @@
-# Kev O'Wino - Senior Full-Stack Portfolio
+
+# Kev Owino - Software Developer Portfolio
 
 A high-performance, AI-integrated developer portfolio built with **Next.js 15**, **React 19**, and the **Gemini 3 API**.
 
@@ -22,7 +23,7 @@ A high-performance, AI-integrated developer portfolio built with **Next.js 15**,
 
 1. **Install Dependencies**:
    ```bash
-   yarn install
+   npm install
    ```
 
 2. **Set Environment Variables**:
@@ -33,7 +34,7 @@ A high-performance, AI-integrated developer portfolio built with **Next.js 15**,
 
 3. **Run Development Server**:
    ```bash
-   yarn dev
+   npm run dev
    ```
 
 ## 🌐 Deployment

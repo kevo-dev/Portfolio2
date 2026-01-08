@@ -57,7 +57,7 @@ export const BIO = {
   name: "Kev Owino",
   role: "Self-taught Software Developer",
   location: "Nairobi, Kenya",
-  about: "I'm a passionate self-taught software developer dedicated to building scalable web applications and solving complex architectural problems. I first mastered the fundamentals through the freeCodeCamp curriculum and have since committed to continuous learning and contributing back to the open-source community.",
+  about: "I'm a passionate self-taught software developer focused on building scalable web applications and solving complex architectural problems. I first picked up my coding fundamentals through freeCodeCamp and have since grown into a dedicated full-stack developer committed to continuous learning.",
   email: "hello@kevowino.dev",
   socials: {
     github: "https://github.com/kevo-dev",

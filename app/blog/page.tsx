@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -24,7 +23,7 @@ export default function BlogPage({ onNavigate }: BlogPageProps) {
         </div>
       </main>
       <footer className="py-12 px-6 border-t border-white/5 text-center text-gray-600 text-[10px] font-black uppercase tracking-[0.2em]">
-        <p>© {new Date().getFullYear()} Kev O'Wino • Neural Expansion Node</p>
+        <p>© {new Date().getFullYear()} Kev Owino • Neural Expansion Node</p>
       </footer>
       <AIAssistant />
     </div>

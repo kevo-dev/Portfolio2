@@ -1,10 +1,12 @@
+
 import { GoogleGenAI } from "@google/genai";
-import { BIO, PROJECTS, SKILLS } from "../../../data";
+import { BIO } from "../../../data";
 import { NextResponse } from "next/server";
 
 const SYSTEM_INSTRUCTION = `
-You are "Kev-AI", the virtual assistant for Kev O'Wino. 
-Professional and technical.
+You are "Kev-AI", the virtual assistant for Kev Owino. 
+Professional and technical tone.
+Identity: Self-taught software developer who started with freeCodeCamp.
 Bio: ${BIO.about}
 Email: ${BIO.email}
 `;
