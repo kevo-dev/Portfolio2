@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, ErrorInfo, ReactNode } from 'react';
+import React, { useState, useEffect, ErrorInfo, ReactNode, Component } from 'react';
 import HomeView from './components/HomeView';
 import BlogView from './components/BlogView';
 
@@ -12,8 +12,8 @@ interface State {
   hasError: boolean;
 }
 
-// Fixed ErrorBoundary by using React.Component directly to ensure property inheritance and type inference for 'props' are correctly resolved
-class ErrorBoundary extends React.Component<Props, State> {
+// Fixed ErrorBoundary by using Component directly to ensure property inheritance and type inference for 'props' are correctly resolved
+class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false
   };
