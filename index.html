@@ -28,11 +28,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <script>
-      // Safe polyfill for process.env to support Gemini SDK
-      window.process = window.process || {};
-      window.process.env = window.process.env || {};
-      window.process.env.NODE_ENV = window.process.env.NODE_ENV || 'production';
-      // API_KEY is pre-configured by the environment.
+      // Polyfill process.env for the browser environment
+      window.process = window.process || { env: { NODE_ENV: 'production' } };
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>

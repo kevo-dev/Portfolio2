@@ -3,23 +3,16 @@ import { BlogPost } from "../types";
 import { BIO } from "../data";
 
 /**
- * Direct client-side integration with Gemini.
- * Uses the platform-injected process.env.API_KEY.
+ * Technical service for Gemini API interactions.
+ * Strictly adheres to the requirement of using process.env.API_KEY directly.
  */
-const getAI = () => {
-  const apiKey = (window as any).process?.env?.API_KEY || (process as any).env?.API_KEY;
-  if (!apiKey) {
-    throw new Error("API Key not detected in environment.");
-  }
-  return new GoogleGenAI({ apiKey });
-};
 
 /**
  * Handles chat interactions with the Kev-AI persona.
  */
 export const getGeminiResponse = async (userMessage: string): Promise<string> => {
   try {
-    const ai = getAI();
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: userMessage,
@@ -46,7 +39,7 @@ export const getGeminiResponse = async (userMessage: string): Promise<string> =>
  */
 export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
   try {
-    const ai = getAI();
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const prompt = `Act as a tech news aggregator for Kev's Journal. Find 6 hot stories in software engineering (React, TypeScript, AI, Cloud) for today.
     Return the result as a JSON array.`;
 
@@ -93,7 +86,7 @@ export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
  */
 export const expandBlogPost = async (post: BlogPost): Promise<{ content: string; sources: any[] }> => {
   try {
-    const ai = getAI();
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const prompt = `Conduct a technical deep-dive into the following engineering topic: "${post.title}".
     Context: "${post.summary}"
     
@@ -115,7 +108,12 @@ export const expandBlogPost = async (post: BlogPost): Promise<{ content: string;
 
     const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
     const sources = groundingChunks
-      .map((chunk: any) => chunk.web?.uri ? { title: chunk.web.title, uri: chunk.web.uri } : null)
+      .map((chunk: any) => {
+        if (chunk.web) {
+          return { title: chunk.web.title, uri: chunk.web.uri };
+        }
+        return null;
+      })
       .filter(Boolean);
 
     return { 
