@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -10,19 +9,21 @@ import { SectionId } from '../types';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell } from 'recharts';
 import { motion } from 'framer-motion';
 
-interface HomePageProps {
-  onNavigate: (view: 'home' | 'blog') => void;
-}
-
-export default function HomePage({ onNavigate }: HomePageProps) {
+export default function HomePage() {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Internal navigation for environment compatibility
+  const handleNavigate = (view: 'home' | 'blog') => {
+    if (view === 'blog') window.location.hash = 'blog';
+    else window.location.hash = '';
+  };
+
   return (
     <div className="relative min-h-screen bg-[#030712] text-gray-100 selection:bg-indigo-500/30 bg-grain">
-      <Navbar currentView="home" onNavigate={onNavigate} />
+      <Navbar currentView="home" onNavigate={handleNavigate} />
 
       <main className="mesh-gradient">
         {/* Hero Section */}

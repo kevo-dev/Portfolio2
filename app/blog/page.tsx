@@ -5,14 +5,16 @@ import Navbar from '../../components/Navbar';
 import Blog from '../../components/Blog';
 import AIAssistant from '../../components/AIAssistant';
 
-interface BlogPageProps {
-  onNavigate: (view: 'home' | 'blog') => void;
-}
+export default function BlogPage() {
+  // Internal navigation for environment compatibility
+  const handleNavigate = (view: 'home' | 'blog') => {
+    if (view === 'home') window.location.hash = '';
+    else window.location.hash = 'blog';
+  };
 
-export default function BlogPage({ onNavigate }: BlogPageProps) {
   return (
     <div className="relative min-h-screen bg-[#030712] text-gray-100 bg-grain">
-      <Navbar currentView="blog" onNavigate={onNavigate} />
+      <Navbar currentView="blog" onNavigate={handleNavigate} />
       <main className="pt-32 pb-20 px-6">
         <div className="max-w-7xl mx-auto">
           <header className="mb-16 space-y-4">
