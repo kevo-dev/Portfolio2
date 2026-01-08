@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -9,28 +8,38 @@ export default function App() {
   const [view, setView] = useState<'home' | 'blog'>('home');
 
   useEffect(() => {
-    const handleHashChange = () => {
+    const handleNavigation = () => {
       const hash = window.location.hash;
-      if (hash.startsWith('#blog')) {
+      const path = window.location.pathname;
+      
+      // Support both /blog path and #blog hash for seamless navigation
+      if (hash.startsWith('#blog') || path.includes('/blog')) {
         setView('blog');
       } else {
         setView('home');
       }
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    handleHashChange();
+    // Sync state on hash changes and browser back/forward buttons
+    window.addEventListener('hashchange', handleNavigation);
+    window.addEventListener('popstate', handleNavigation);
+    
+    // Initial check on mount
+    handleNavigation();
 
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    return () => {
+      window.removeEventListener('hashchange', handleNavigation);
+      window.removeEventListener('popstate', handleNavigation);
+    };
   }, []);
 
   const navigateTo = (newView: 'home' | 'blog') => {
     setView(newView);
     if (newView === 'blog') {
-      window.location.hash = 'blog';
+      window.history.pushState(null, '', '/blog');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      window.location.hash = '';
-      // If we're already on home but the hash was #blog, clearing it might not trigger scroll
+      window.history.pushState(null, '', '/');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };

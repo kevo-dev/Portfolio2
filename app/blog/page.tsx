@@ -1,2 +1,13 @@
+'use client';
 
-// File removed. Blog view is handled within App.tsx via state and hash routing.
+import React from 'react';
+import App from '../App';
+
+/**
+ * Next.js requires all files in the app directory to have a valid default export.
+ * This page component renders the main App, which handles the internal 
+ * routing logic based on the current path and hash.
+ */
+export default function BlogRoute() {
+  return <App />;
+}
