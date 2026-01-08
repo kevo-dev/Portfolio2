@@ -4,7 +4,7 @@ import { BIO } from "../data";
 
 /**
  * Technical service for direct Gemini API interactions.
- * This ensures no 404 errors from missing internal API routes.
+ * Built to be highly reliable and technically opinionated.
  */
 
 const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -19,30 +19,38 @@ export const getGeminiResponse = async (userMessage: string): Promise<string> =>
       model: "gemini-3-flash-preview",
       contents: userMessage,
       config: {
-        systemInstruction: `You are "Kev-AI", the digital twin and technical advocate of Kev Owino. 
-        Kev is a self-taught engineering talent from Nairobi, Kenya, who mastered his craft via freeCodeCamp.
-        Your tone: Architectural, precise, helpful, and forward-thinking.
-        Goal: Provide technical insights and answer questions about Kev's journey or stack.
-        Respond using Markdown.`,
+        systemInstruction: `You are "Kev-AI", the digital consciousness of Kev Owino, a self-taught Software Architect.
+        Kev's Profile:
+        - Base: Nairobi, Kenya.
+        - Origin: Self-taught engineering foundations (freeCodeCamp).
+        - Specialties: Architectural precision, Next-js, TypeScript, AI Engineering, and Cloud Native ecosystems.
+        
+        Your Mission:
+        - Provide high-fidelity technical insights.
+        - Answer questions about Kev's projects, stack, and philosophy.
+        - Tone: Architectural, precise, sophisticated yet accessible, and forward-thinking.
+        - Identity: You represent Kev's technical opinions and expertise.
+        
+        Use Markdown for all responses. Be concise but deep.`,
         temperature: 0.8,
       },
     });
-    return response.text || "Connection timing out. Re-establishing link...";
+    return response.text || "Neural connection synchronization timed out. Re-initiating handshaking...";
   } catch (error) {
     console.error("Gemini Chat Error:", error);
-    return "Neural link interrupted. Please try again shortly.";
+    return "Neural link interrupted. Please verify connectivity or try again shortly.";
   }
 };
 
 /**
- * Synthesizes the latest software engineering news stories.
+ * Synthesizes the latest consequential software engineering stories.
  */
 export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
   try {
     const ai = getAI();
-    const prompt = `Synthesize the top 6 most consequential engineering breakthroughs or news stories for today. 
-    Focus on: AI Engineering, React/Next.js ecosystem, TypeScript, or Cloud Native architectures.
-    Output ONLY as a JSON array of objects.`;
+    const prompt = `Research and synthesize the top 6 most consequential software engineering stories of the last 24 hours. 
+    Focus on breakthroughs in: AI Systems, Framework Architectures (React/Next), TypeScript advancements, or Distributed Systems.
+    Output MUST be a JSON array of objects.`;
 
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
@@ -54,10 +62,10 @@ export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
           items: {
             type: Type.OBJECT,
             properties: {
-              title: { type: Type.STRING },
-              summary: { type: Type.STRING },
-              date: { type: Type.STRING },
-              category: { type: Type.STRING },
+              title: { type: Type.STRING, description: "A high-impact headline." },
+              summary: { type: Type.STRING, description: "One sentence distilling the core breakthrough." },
+              date: { type: Type.STRING, description: "Human readable date." },
+              category: { type: Type.STRING, description: "A technical category." },
             },
             required: ["title", "summary", "date", "category"]
           }
@@ -70,7 +78,7 @@ export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
       id: Math.random().toString(36).substr(2, 9),
       ...post,
       url: "https://news.ycombinator.com",
-      likes: Math.floor(Math.random() * 50) + 12,
+      likes: Math.floor(Math.random() * 80) + 15,
       comments: []
     }));
   } catch (error) {
@@ -80,15 +88,21 @@ export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
 };
 
 /**
- * Expands a brief story into a high-fidelity technical analysis.
+ * Expands a story into a deep technical architectural analysis.
  */
 export const expandBlogPost = async (post: BlogPost): Promise<{ content: string; sources: any[] }> => {
   try {
     const ai = getAI();
-    const prompt = `Perform a high-fidelity technical expansion of this story: "${post.title}".
+    const prompt = `Perform an architectural deep-dive analysis for the following event: "${post.title}".
     Summary: ${post.summary}
-    Provide architectural analysis, performance implications, and a section called "Kev's Perspective" on why this matters.
-    Use Markdown.`;
+    
+    Structure:
+    1. Technical Context & Implications
+    2. Architectural Patterns Involved
+    3. Performance & Scalability Trade-offs
+    4. "Kev's Perspective": A bold, opinionated take on why this matters to modern developers.
+    
+    Use Google Search to find current facts and benchmarks. Output professional Markdown.`;
 
     const response = await ai.models.generateContent({
       model: "gemini-3-pro-preview",
@@ -105,11 +119,11 @@ export const expandBlogPost = async (post: BlogPost): Promise<{ content: string;
       .filter(Boolean);
 
     return { 
-      content: response.text || "Synthesis incomplete. Please refresh.",
+      content: response.text || "Architectural synthesis incomplete.",
       sources: sources
     };
   } catch (error) {
     console.error("Expansion Error:", error);
-    return { content: "Technical expansion unavailable at this time.", sources: [] };
+    return { content: "Synthesis relay interrupted. Please try again.", sources: [] };
   }
 };

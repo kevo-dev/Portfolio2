@@ -1,7 +1,6 @@
-
 'use client';
 
-import React, { useState, useEffect, Component, ErrorInfo, ReactNode } from 'react';
+import React, { useState, useEffect, ErrorInfo, ReactNode } from 'react';
 import HomeView from './components/HomeView';
 import BlogView from './components/BlogView';
 
@@ -13,8 +12,8 @@ interface State {
   hasError: boolean;
 }
 
-// Fixed ErrorBoundary by using the imported Component class directly to ensure property inheritance and type inference for 'props' are correctly resolved
-class ErrorBoundary extends Component<Props, State> {
+// Fixed ErrorBoundary by using React.Component directly to ensure property inheritance and type inference for 'props' are correctly resolved
+class ErrorBoundary extends React.Component<Props, State> {
   public state: State = {
     hasError: false
   };
@@ -50,7 +49,7 @@ class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    // Accessing children from props, which is inherited from the Component base class
+    // Accessing children from props, which is inherited from the React.Component base class
     return this.props.children;
   }
 }
