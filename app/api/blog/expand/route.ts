@@ -2,13 +2,16 @@ import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function POST(req: Request) {
   try {
     const { title, summary, url } = await req.json();
     const apiKey = process.env.API_KEY;
 
-    if (!apiKey) throw new Error("API_KEY missing");
+    if (!apiKey) {
+      return NextResponse.json({ content: "API Key Missing" }, { status: 500 });
+    }
 
     const ai = new GoogleGenAI({ apiKey });
     
@@ -19,8 +22,8 @@ export async function POST(req: Request) {
     REQUIREMENTS:
     1. Architectural Analysis: Discuss patterns, performance implications, and scalability.
     2. Section: "## Kev's Engineering Perspective": Provide bold, opinionated commentary on why this matters to modern developers.
-    3. Technical Depth: Use code concepts or architectural diagrams (described in text).
-    4. Format: Clean, professional Markdown.`;
+    3. Technical Depth: Use code concepts or architectural diagrams.
+    4. Format: Clean Markdown.`;
 
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
@@ -41,9 +44,9 @@ export async function POST(req: Request) {
       sources: sources
     });
   } catch (error) {
-    console.error("Blog Expansion API Error:", error);
+    console.error("Expansion API Error:", error);
     return NextResponse.json({ 
-      content: "Neural connectivity interrupted. Synthesis could not be completed for this specific node.",
+      content: "Neural connectivity interrupted. Synthesis could not be completed.",
       sources: []
     }, { status: 500 });
   }

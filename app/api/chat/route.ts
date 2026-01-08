@@ -1,24 +1,26 @@
-
 import { GoogleGenAI } from "@google/genai";
 import { BIO } from "../../../data";
 import { NextResponse } from "next/server";
+
+export const dynamic = 'force-dynamic';
 
 const SYSTEM_INSTRUCTION = `
 You are "Kev-AI", the virtual assistant for Kev Owino. 
 Tone: Professional, helpful, and technical.
 Identity: Kev Owino is a self-taught software developer based in Nairobi, Kenya.
-Background: He built his engineering foundations through freeCodeCamp and has since specialized in modern web architectures.
+Background: He built his engineering foundations through freeCodeCamp.
 Email: ${BIO.email}
 GitHub: ${BIO.socials.github}
-
-Always refer to him as a "Software Developer". 
-If asked about his journey, briefly mention he is self-taught via freeCodeCamp.
 `;
 
 export async function POST(req: Request) {
   try {
     const { message } = await req.json();
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const apiKey = process.env.API_KEY;
+    
+    if (!apiKey) throw new Error("API Key Missing");
+
+    const ai = new GoogleGenAI({ apiKey });
 
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",

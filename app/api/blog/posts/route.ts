@@ -2,21 +2,22 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { NextResponse } from "next/server";
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET() {
   const apiKey = process.env.API_KEY;
   
   if (!apiKey) {
-    console.error("Critical: API_KEY is missing in environment variables.");
-    return NextResponse.json({ error: "Configuration Error" }, { status: 500 });
+    console.error("Critical: API_KEY is missing.");
+    return NextResponse.json({ error: "Configuration Missing" }, { status: 500 });
   }
 
-  const ai = new GoogleGenAI({ apiKey });
-  const prompt = `Research the top 6 most consequential engineering news stories for today. 
-  Focus on React 19, TypeScript 5+, AI Engineering, or Cloud Native architectures.
-  Return as a JSON array of objects with title, summary, date, and category.`;
-
   try {
+    const ai = new GoogleGenAI({ apiKey });
+    const prompt = `Research the top 6 most consequential engineering news stories for today. 
+    Focus on React 19, TypeScript 5+, AI Engineering, or Cloud Native architectures.
+    Return as a JSON array of objects with title, summary, date, and category.`;
+
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: prompt,
@@ -39,7 +40,7 @@ export async function GET() {
     });
 
     const text = response.text;
-    if (!text) throw new Error("Empty response from Gemini");
+    if (!text) throw new Error("Empty AI response");
 
     const baseData = JSON.parse(text);
     const posts = baseData.map((item: any) => ({
@@ -51,8 +52,8 @@ export async function GET() {
     }));
 
     return NextResponse.json(posts);
-  } catch (error) {
-    console.error("Gemini Content Generation Error:", error);
-    return NextResponse.json({ error: "Neural Synthesis Failed" }, { status: 500 });
+  } catch (error: any) {
+    console.error("Gemini GET Error:", error);
+    return NextResponse.json({ error: "Neural Synthesis Timeout" }, { status: 500 });
   }
 }

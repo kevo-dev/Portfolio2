@@ -1,20 +1,30 @@
 import { BlogPost } from "../types";
 
 /**
+ * Ensures we hit the root-level API correctly regardless of sub-route.
+ */
+const getBaseUrl = () => {
+  if (typeof window !== 'undefined') {
+    return window.location.origin;
+  }
+  return '';
+};
+
+/**
  * Client-side wrapper for the neural assistant.
  * Proxies requests to /api/chat to protect the API key.
  */
 export const getGeminiResponse = async (userMessage: string) => {
   try {
-    const response = await fetch('/api/chat', {
+    const response = await fetch(`${getBaseUrl()}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: userMessage }),
     });
     
     if (!response.ok) {
-      console.error(`Gemini Proxy failed with status: ${response.status}`);
-      return "Neural link sync failed. Please try again.";
+      console.error(`Gemini Proxy failed: ${response.status}`);
+      return "Neural link sync failed. The node is temporarily offline.";
     }
 
     const data = await response.json();
@@ -30,13 +40,21 @@ export const getGeminiResponse = async (userMessage: string) => {
  */
 export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
   try {
-    const response = await fetch('/api/blog/posts', { cache: 'no-store' });
+    // Force no-cache to prevent Vercel from caching 404s or old data
+    const response = await fetch(`${getBaseUrl()}/api/blog/posts`, { 
+      cache: 'no-store',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`Blog Fetch failed (${response.status}):`, errorText);
-      throw new Error(`Failed to fetch posts: ${response.status}`);
+      console.error(`Blog Fetch failed (${response.status})`);
+      return [];
     }
-    return await response.json();
+
+    const data = await response.json();
+    return Array.isArray(data) ? data : [];
   } catch (error) {
     console.error("Blog Fetch Proxy Error:", error);
     return [];
@@ -48,7 +66,7 @@ export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
  */
 export const expandBlogPost = async (post: BlogPost): Promise<{ content: string; sources: any[] }> => {
   try {
-    const response = await fetch('/api/blog/expand', {
+    const response = await fetch(`${getBaseUrl()}/api/blog/expand`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -56,13 +74,15 @@ export const expandBlogPost = async (post: BlogPost): Promise<{ content: string;
         summary: post.summary,
         url: post.url
       }),
+      cache: 'no-store'
     });
+    
     if (!response.ok) throw new Error('Expansion failed');
     return await response.json();
   } catch (error) {
     console.error("Expansion Proxy Error:", error);
     return { 
-      content: "Neural connectivity interrupted during synthesis.", 
+      content: "Neural connectivity interrupted during synthesis. Please check back later.", 
       sources: [] 
     };
   }
