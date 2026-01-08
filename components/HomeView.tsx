@@ -1,4 +1,3 @@
-
 'use client';
 
 import React from 'react';
@@ -7,12 +6,32 @@ import BentoGrid from './BentoGrid';
 import AIAssistant from './AIAssistant';
 import { PROJECTS, SKILLS, BIO } from '../data';
 import { SectionId } from '../types';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell } from 'recharts';
 import { motion } from 'framer-motion';
+import { Github, Linkedin, Twitter, Instagram, Facebook } from 'lucide-react';
 
 interface HomeViewProps {
   onNavigate: (view: 'home' | 'blog') => void;
 }
+
+const SocialLinks = () => (
+  <div className="flex items-center gap-6">
+    <a href={BIO.socials.github} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-xl text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all hover:-translate-y-1" title="GitHub">
+      <Github size={18} />
+    </a>
+    <a href={BIO.socials.linkedin} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-xl text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all hover:-translate-y-1" title="LinkedIn">
+      <Linkedin size={18} />
+    </a>
+    <a href={BIO.socials.twitter} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-xl text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all hover:-translate-y-1" title="Twitter">
+      <Twitter size={18} />
+    </a>
+    <a href={BIO.socials.instagram} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-xl text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all hover:-translate-y-1" title="Instagram">
+      <Instagram size={18} />
+    </a>
+    <a href={BIO.socials.facebook} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-xl text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all hover:-translate-y-1" title="Facebook">
+      <Facebook size={18} />
+    </a>
+  </div>
+);
 
 export default function HomeView({ onNavigate }: HomeViewProps) {
   const scrollTo = (id: string) => {
@@ -63,7 +82,7 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
               <a href={BIO.socials.github} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-12 py-5 bg-white text-black font-black rounded-2xl hover:bg-gray-200 transition-all shadow-[0_20px_40px_rgba(255,255,255,0.1)] active:scale-95 text-center uppercase tracking-widest text-xs flex items-center justify-center gap-2">
-                GitHub Profile
+                <Github size={16} /> GitHub Profile
               </a>
               <button onClick={() => scrollTo(SectionId.Projects)} className="w-full sm:w-auto px-12 py-5 glass border border-white/10 text-white font-black rounded-2xl hover:border-indigo-500/50 transition-all active:scale-95 text-center uppercase tracking-widest text-xs">
                 View Projects
@@ -84,7 +103,23 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                 <div className="absolute -inset-10 bg-indigo-500/10 rounded-[4rem] blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
                 <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl border border-white/5 aspect-[4/5] glass p-2">
                   <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-transparent z-20" />
-                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800" alt="Kev Owino" className="w-full h-full object-cover grayscale brightness-75 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700" />
+                  
+                  {/* Persona: Portrait of an African man */}
+                  <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?auto=format&fit=crop&q=80&w=800" alt="Kev Owino" className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700" />
+                  
+                  {/* Cyber-Neural Glow Effects */}
+                  <div className="absolute inset-0 pointer-events-none z-25">
+                     <div className="w-full h-full relative">
+                        {/* Red eye glows - calibrated for this specific image face position */}
+                        <div className="absolute top-[34.8%] left-[43.5%] w-2 h-1.5 bg-red-600/80 rounded-full blur-[4px] animate-pulse shadow-[0_0_12px_#dc2626] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                        <div className="absolute top-[34.8%] left-[55.2%] w-2 h-1.5 bg-red-600/80 rounded-full blur-[4px] animate-pulse shadow-[0_0_12px_#dc2626] [animation-delay:0.3s] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                        
+                        {/* Secondary neural flicker */}
+                        <div className="absolute top-[34.8%] left-[43.5%] w-1 h-1 bg-white rounded-full blur-[1px] opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
+                        <div className="absolute top-[34.8%] left-[55.2%] w-1 h-1 bg-white rounded-full blur-[1px] opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
+                     </div>
+                  </div>
+
                   <div className="absolute bottom-10 left-10 z-30 text-white">
                      <h4 className="text-3xl font-black">Kev Owino</h4>
                      <p className="text-xs font-bold text-indigo-400 uppercase tracking-widest">Self-taught Dev @ Nairobi</p>
@@ -97,6 +132,10 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
                   <h2 className="text-indigo-400 font-mono tracking-[0.4em] text-[10px] uppercase font-black">01 / The Vision</h2>
                   <h3 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]">Engineering <br /><span className="text-indigo-500 italic">Curiosity</span>.</h3>
                   <p className="text-xl text-gray-400 leading-relaxed font-light">{BIO.about}</p>
+                  
+                  <div className="pt-6">
+                    <SocialLinks />
+                  </div>
                 </div>
               </div>
             </div>
@@ -144,11 +183,17 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
       </main>
 
       <footer className="py-20 px-6 border-t border-white/5 bg-[#010309] flex flex-col md:flex-row justify-between items-center gap-10">
-        <div className="flex items-center gap-4">
-           <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-black text-white text-xs">KO</div>
-           <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 italic">Engineering Premium Ops.</p>
+        <div className="flex flex-col gap-6 items-start">
+           <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-black text-white text-xs">KO</div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 italic">Engineering Premium Ops.</p>
+           </div>
+           <SocialLinks />
         </div>
-        <p className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">© {new Date().getFullYear()} Kev Owino Portfolio V2.0.0</p>
+        <div className="flex flex-col items-center md:items-end gap-2">
+           <p className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">© {new Date().getFullYear()} Kev Owino Portfolio V2.1.0</p>
+           <p className="text-[8px] font-mono text-indigo-500/40 uppercase tracking-[0.3em]">Built with Neural Precision</p>
+        </div>
       </footer>
 
       <AIAssistant />

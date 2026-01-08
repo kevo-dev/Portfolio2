@@ -1,11 +1,19 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
-  // Always use the direct environment variable for the API key
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  const prompt = `Research the top 5 most consequential and debatable engineering news stories for today. 
-  Focus on React, TypeScript, AI Engineering, or Cloud Native ecosystems.
+  const apiKey = process.env.API_KEY;
+  
+  if (!apiKey) {
+    console.error("Critical: API_KEY is missing in environment variables.");
+    return NextResponse.json({ error: "Configuration Error" }, { status: 500 });
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+  const prompt = `Research the top 6 most consequential engineering news stories for today. 
+  Focus on React 19, TypeScript 5+, AI Engineering, or Cloud Native architectures.
   Return as a JSON array of objects with title, summary, date, and category.`;
 
   try {
@@ -30,18 +38,21 @@ export async function GET() {
       },
     });
 
-    // Extract text from the .text property
-    const baseData = JSON.parse(response.text || "[]");
+    const text = response.text;
+    if (!text) throw new Error("Empty response from Gemini");
+
+    const baseData = JSON.parse(text);
     const posts = baseData.map((item: any) => ({
       id: Math.random().toString(36).substr(2, 9),
       ...item,
       url: "https://news.ycombinator.com",
-      likes: Math.floor(Math.random() * 50) + 10,
+      likes: Math.floor(Math.random() * 100) + 20,
       comments: []
     }));
 
     return NextResponse.json(posts);
   } catch (error) {
-    return NextResponse.json([], { status: 500 });
+    console.error("Gemini Content Generation Error:", error);
+    return NextResponse.json({ error: "Neural Synthesis Failed" }, { status: 500 });
   }
 }

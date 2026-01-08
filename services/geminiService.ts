@@ -1,80 +1,69 @@
-
-import { GoogleGenAI, Type } from "@google/genai";
-import { BIO, PROJECTS, SKILLS } from "../data";
 import { BlogPost } from "../types";
 
-const SYSTEM_INSTRUCTION = `
-You are "Kev-AI", the neural representative for Kev Owino, a self-taught Software Developer.
-Context:
-- Identity: Kev Owino, based in Nairobi, Kenya.
-- Background: Self-taught software developer who started their journey with freeCodeCamp.
-- Expertise: Web architectures, React ecosystem, and AI integration.
-- Portfolio Projects: ${PROJECTS.map(p => p.title).join(', ')}.
-- Technical Stack: ${SKILLS.map(s => s.name).join(', ')}.
-
-Tone: Skilled professional. Approachable but technically profound. Focus on engineering excellence.
-Rule: If asked about pricing or hiring specifics, guide them to contact Kev directly at ${BIO.email}.
-`;
-
+/**
+ * Client-side wrapper for the neural assistant.
+ * Proxies requests to /api/chat to protect the API key.
+ */
 export const getGeminiResponse = async (userMessage: string) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: userMessage,
-      config: {
-        systemInstruction: SYSTEM_INSTRUCTION,
-        temperature: 0.7,
-      },
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: userMessage }),
     });
+    
+    if (!response.ok) {
+      console.error(`Gemini Proxy failed with status: ${response.status}`);
+      return "Neural link sync failed. Please try again.";
+    }
 
-    return response.text || "Neural link sync failed. Please try again.";
+    const data = await response.json();
+    return data.text || "Neural link sync failed. Please try again.";
   } catch (error) {
-    console.error("Gemini Error:", error);
+    console.error("Gemini Proxy Connection Error:", error);
     return "Service temporarily offline for maintenance.";
   }
 };
 
+/**
+ * Fetches the latest technical news via the internal API route.
+ */
 export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  const prompt = `Research 5 high-impact, breaking technical news stories in React, AI Engineering, or Cloud Systems. Focus on architectural shifts.`;
-
   try {
-    const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.ARRAY,
-          items: {
-            type: Type.OBJECT,
-            properties: {
-              title: { type: Type.STRING, description: "Technical headline" },
-              summary: { type: Type.STRING, description: "Condensed architectural impact" },
-              date: { type: Type.STRING },
-              category: { type: Type.STRING },
-            },
-            required: ["title", "summary", "date", "category"]
-          }
-        }
-      },
-    });
-
-    const baseData = JSON.parse(response.text || "[]");
-    
-    return baseData.map((item: any) => ({
-      id: Math.random().toString(36).substr(2, 9),
-      title: item.title,
-      summary: item.summary,
-      date: item.date,
-      category: item.category,
-      url: "https://news.ycombinator.com",
-      likes: Math.floor(Math.random() * 100) + 20,
-      comments: []
-    }));
+    const response = await fetch('/api/blog/posts', { cache: 'no-store' });
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Blog Fetch failed (${response.status}):`, errorText);
+      throw new Error(`Failed to fetch posts: ${response.status}`);
+    }
+    return await response.json();
   } catch (error) {
+    console.error("Blog Fetch Proxy Error:", error);
     return [];
+  }
+};
+
+/**
+ * Deep-dives into a specific post using the internal expansion API.
+ */
+export const expandBlogPost = async (post: BlogPost): Promise<{ content: string; sources: any[] }> => {
+  try {
+    const response = await fetch('/api/blog/expand', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: post.title,
+        summary: post.summary,
+        url: post.url
+      }),
+    });
+    if (!response.ok) throw new Error('Expansion failed');
+    return await response.json();
+  } catch (error) {
+    console.error("Expansion Proxy Error:", error);
+    return { 
+      content: "Neural connectivity interrupted during synthesis.", 
+      sources: [] 
+    };
   }
 };

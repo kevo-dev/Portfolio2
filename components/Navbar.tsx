@@ -1,8 +1,8 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { BIO } from '../data';
+import { Github, Linkedin, Twitter, Instagram, Facebook } from 'lucide-react';
 
 interface NavbarProps {
   currentView: 'home' | 'blog';
@@ -110,20 +110,32 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate }) => {
       <div className={`fixed inset-0 z-[140] lg:hidden transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)] ${isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'}`}>
         <div className="absolute inset-0 bg-[#030712]/95 backdrop-blur-3xl" />
         <div className="relative h-full flex flex-col justify-center items-center px-8">
-          <ul className="flex flex-col gap-10 text-center relative z-10">
+          <ul className="flex flex-col gap-6 text-center relative z-10 mb-12">
             {navLinks.map((link) => (
               <li key={link.name}>
-                <button onClick={() => handleAction(link)} className="text-5xl font-black tracking-tighter text-white hover:text-indigo-400 active:scale-95 inline-block">
+                <button onClick={() => handleAction(link)} className="text-4xl font-black tracking-tighter text-white hover:text-indigo-400 active:scale-95 inline-block">
                   {link.name}
                 </button>
               </li>
             ))}
             <li>
-              <button onClick={() => handleAction({ target: 'contact', type: 'scroll' })} className="text-2xl font-black tracking-tighter text-indigo-500 uppercase">
+              <button onClick={() => handleAction({ target: 'contact', type: 'scroll' })} className="text-xl font-black tracking-tighter text-indigo-500 uppercase">
                 Contact
               </button>
             </li>
           </ul>
+
+          <div className="flex gap-4 relative z-10">
+            <a href={BIO.socials.github} target="_blank" rel="noopener noreferrer" className="p-4 glass rounded-2xl text-white">
+              <Github size={20} />
+            </a>
+            <a href={BIO.socials.linkedin} target="_blank" rel="noopener noreferrer" className="p-4 glass rounded-2xl text-white">
+              <Linkedin size={20} />
+            </a>
+            <a href={BIO.socials.twitter} target="_blank" rel="noopener noreferrer" className="p-4 glass rounded-2xl text-white">
+              <Twitter size={20} />
+            </a>
+          </div>
         </div>
       </div>
     </>

@@ -35,11 +35,12 @@ export default function App() {
 
   const navigateTo = (newView: 'home' | 'blog') => {
     setView(newView);
+    const search = window.location.search; // Preserve any search params like ?id=...
     if (newView === 'blog') {
-      window.history.pushState(null, '', '/blog');
+      window.history.pushState(null, '', `/blog${search}`);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      window.history.pushState(null, '', '/');
+      window.history.pushState(null, '', `/${search}`);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };

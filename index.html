@@ -14,41 +14,49 @@
     <meta property="og:url" content="https://kevowino.dev/">
     <meta property="og:title" content="Kev Owino | Self-taught Software Developer">
     <meta property="og:description" content="Self-taught software developer specializing in React, Node.js, and modern web architectures.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://kevowino.dev/">
     <meta property="twitter:title" content="Kev Owino | Self-taught Software Developer">
     <meta property="twitter:description" content="Self-taught software developer specializing in React, Node.js, and modern web architectures.">
-    <meta property="twitter:image" content="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800">
+    <meta property="twitter:image" content="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=800">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <script>
-      // Polyfill process for browser environment to support Gemini SDK
-      window.process = window.process || { env: {} };
+      // Robust polyfill for process.env to support Gemini SDK and other Node-style libraries
+      window.process = {
+        env: {
+          NODE_ENV: 'production',
+          API_KEY: '' // This will be injected by the platform environment
+        },
+        cwd: () => '/',
+        browser: true
+      };
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="importmap">
 {
   "imports": {
-    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
-    "react": "https://esm.sh/react@^19.0.0",
-    "react-dom": "https://esm.sh/react-dom@^19.0.0",
-    "react-dom/client": "https://esm.sh/react-dom@^19.0.0/client",
-    "recharts": "https://esm.sh/recharts@^2.15.0",
-    "framer-motion": "https://esm.sh/framer-motion@^11.13.1",
-    "lucide-react": "https://esm.sh/lucide-react@^0.468.0",
-    "react/": "https://esm.sh/react@^19.0.0/",
-    "react-dom/": "https://esm.sh/react-dom@^19.0.0/",
-    "@tailwindcss/typography": "https://esm.sh/@tailwindcss/typography@^0.5.15",
-    "tailwindcss": "https://esm.sh/tailwindcss@^4.1.18",
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "react/jsx-runtime": "https://esm.sh/react@19.0.0/jsx-runtime",
+    "framer-motion": "https://esm.sh/framer-motion@11.13.1?external=react,react-dom",
+    "lucide-react": "https://esm.sh/lucide-react@0.468.0?external=react",
+    "recharts": "https://esm.sh/recharts@2.15.0?external=react,react-dom",
+    "@google/genai": "https://esm.sh/@google/genai@1.34.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "next": "https://esm.sh/next@^16.1.1",
     "next/": "https://esm.sh/next@^16.1.1/",
-    "next": "https://esm.sh/next@^16.1.1"
+    "tailwindcss": "https://esm.sh/tailwindcss@^4.1.18",
+    "@tailwindcss/typography": "https://esm.sh/@tailwindcss/typography@^0.5.19"
   }
 }
 </script>
@@ -119,5 +127,6 @@
 </head>
 <body class="bg-[#030712] text-gray-100 selection:bg-indigo-500/30">
     <div id="root"></div>
+    <script type="module" src="index.tsx"></script>
 </body>
 </html>

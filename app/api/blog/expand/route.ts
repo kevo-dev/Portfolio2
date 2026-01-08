@@ -1,21 +1,27 @@
-
 import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  const { title, summary, url } = await req.json();
-  
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-  
-  const prompt = `Act as a Software Developer. Produce a high-fidelity, fully rewritten technical deep-dive on: "${title}".
-  Summary: "${summary}"
-  Source: ${url}
-  REQUIREMENTS:
-  1. Multi-Source Synthesis: Cross-reference this with recent technical trends.
-  2. Section: "## Kev's Engineering Perspective": Provide bold commentary on trade-offs and architectural impact.
-  3. Format: Professional Markdown.`;
+export const dynamic = 'force-dynamic';
 
+export async function POST(req: Request) {
   try {
+    const { title, summary, url } = await req.json();
+    const apiKey = process.env.API_KEY;
+
+    if (!apiKey) throw new Error("API_KEY missing");
+
+    const ai = new GoogleGenAI({ apiKey });
+    
+    const prompt = `Act as a Senior Software Architect. Produce a high-fidelity, technical deep-dive on: "${title}".
+    Context: "${summary}"
+    Original Source: ${url}
+    
+    REQUIREMENTS:
+    1. Architectural Analysis: Discuss patterns, performance implications, and scalability.
+    2. Section: "## Kev's Engineering Perspective": Provide bold, opinionated commentary on why this matters to modern developers.
+    3. Technical Depth: Use code concepts or architectural diagrams (described in text).
+    4. Format: Clean, professional Markdown.`;
+
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: prompt,
@@ -26,7 +32,6 @@ export async function POST(req: Request) {
     });
 
     const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
-    
     const sources = groundingChunks
       .map((chunk: any) => chunk.web?.uri ? { title: chunk.web.title, uri: chunk.web.uri } : null)
       .filter(Boolean);
@@ -36,7 +41,10 @@ export async function POST(req: Request) {
       sources: sources
     });
   } catch (error) {
-    console.error("Expansion error:", error);
-    return NextResponse.json({ content: "Expansion failed due to neural connectivity issues." }, { status: 500 });
+    console.error("Blog Expansion API Error:", error);
+    return NextResponse.json({ 
+      content: "Neural connectivity interrupted. Synthesis could not be completed for this specific node.",
+      sources: []
+    }, { status: 500 });
   }
 }

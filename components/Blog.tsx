@@ -1,10 +1,8 @@
-
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { BlogPost, Comment } from '../types';
-import { getLiveBlogPosts } from '../services/geminiService';
-import { GoogleGenAI } from "@google/genai";
+import { getLiveBlogPosts, expandBlogPost } from '../services/geminiService';
 
 interface BlogProps {
   isFullPage?: boolean;
@@ -41,11 +39,57 @@ const Blog: React.FC<BlogProps> = ({ isFullPage = false }) => {
   const [commentText, setCommentText] = useState('');
   const [userName, setUserName] = useState('');
 
+  // Handle URL sync for individual post view
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const postId = params.get('id');
+    
+    if (postId && posts.length > 0) {
+      const post = posts.find(p => p.id === postId);
+      if (post && (!selectedPost || selectedPost.id !== postId)) {
+        handlePostClick(post);
+      }
+    } else if (!postId && selectedPost) {
+      setSelectedPost(null);
+    }
+  }, [posts]); // Re-run when posts are loaded
+
+  const handlePostClick = useCallback(async (post: BlogPost) => {
+    setSelectedPost(post);
+    setSources([]); 
+    
+    // Update URL without full refresh to enable deep-linking
+    const url = new URL(window.location.href);
+    url.searchParams.set('id', post.id);
+    window.history.pushState({}, '', url.toString());
+
+    if (!post.content) {
+      setExpanding(true);
+      try {
+        const { content, sources: extractedSources } = await expandBlogPost(post);
+        const updatedPost = { ...post, content };
+        setSelectedPost(updatedPost);
+        setSources(extractedSources);
+        setPosts(prev => prev.map(p => p.id === post.id ? updatedPost : p));
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setExpanding(false);
+      }
+    }
+  }, []);
+
+  const handleBack = () => {
+    setSelectedPost(null);
+    const url = new URL(window.location.href);
+    url.searchParams.delete('id');
+    window.history.pushState({}, '', url.toString());
+  };
+
   // Dynamic Metadata Sync
   useEffect(() => {
     const updateMetaTags = (title: string, description: string) => {
       document.title = title;
-      
       const setMeta = (name: string, content: string, attr: 'name' | 'property' = 'name') => {
         let el = document.querySelector(`meta[${attr}="${name}"]`);
         if (!el) {
@@ -55,7 +99,6 @@ const Blog: React.FC<BlogProps> = ({ isFullPage = false }) => {
         }
         el.setAttribute('content', content);
       };
-
       setMeta('description', description);
       setMeta('og:title', title, 'property');
       setMeta('og:description', description, 'property');
@@ -64,16 +107,9 @@ const Blog: React.FC<BlogProps> = ({ isFullPage = false }) => {
     };
 
     if (selectedPost) {
-      updateMetaTags(
-        `${selectedPost.title} | Kev Owino Journal`,
-        selectedPost.summary
-      );
+      updateMetaTags(`${selectedPost.title} | Kev Owino Journal`, selectedPost.summary);
     } else {
-      // Revert to professional baseline
-      updateMetaTags(
-        "Kev Owino | Self-taught Software Developer",
-        "Self-taught software developer specializing in high-performance web applications and AI solutions."
-      );
+      updateMetaTags("Kev Owino | Self-taught Software Developer", "Self-taught software developer specializing in high-performance web applications.");
     }
   }, [selectedPost]);
 
@@ -91,48 +127,6 @@ const Blog: React.FC<BlogProps> = ({ isFullPage = false }) => {
     };
     fetchPosts();
   }, []);
-
-  const handlePostClick = async (post: BlogPost) => {
-    setSelectedPost(post);
-    setSources([]); 
-    
-    if (!post.content) {
-      setExpanding(true);
-      try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-        const prompt = `Act as a Software Developer. Produce a high-fidelity, fully rewritten technical deep-dive on: "${post.title}".
-        Summary: "${post.summary}"
-        Source: ${post.url}
-        REQUIREMENTS:
-        1. Multi-Source Synthesis: Cross-reference this with recent technical trends.
-        2. Section: "## Kev's Perspective": Provide bold commentary on trade-offs and architectural impact.
-        3. Format: Professional Markdown.`;
-
-        const response = await ai.models.generateContent({
-          model: "gemini-3-flash-preview",
-          contents: prompt,
-          config: {
-            tools: [{ googleSearch: {} }],
-            temperature: 0.8,
-          },
-        });
-
-        const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks || [];
-        const extractedSources = groundingChunks
-          .map((chunk: any) => chunk.web?.uri ? { title: chunk.web.title, uri: chunk.web.uri } : null)
-          .filter(Boolean);
-
-        const updatedPost = { ...post, content: response.text };
-        setSelectedPost(updatedPost);
-        setSources(extractedSources);
-        setPosts(prev => prev.map(p => p.id === post.id ? updatedPost : p));
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setExpanding(false);
-      }
-    }
-  };
 
   const handleAddComment = (e: React.FormEvent) => {
     e.preventDefault();
@@ -152,7 +146,7 @@ const Blog: React.FC<BlogProps> = ({ isFullPage = false }) => {
   if (selectedPost) {
     return (
       <div className="animate-fade-in max-w-4xl mx-auto space-y-12">
-        <button onClick={() => setSelectedPost(null)} className="text-indigo-400 font-bold uppercase tracking-widest text-xs flex items-center gap-2 hover:text-indigo-300 transition-colors">
+        <button onClick={handleBack} className="text-indigo-400 font-bold uppercase tracking-widest text-xs flex items-center gap-2 hover:text-indigo-300 transition-colors">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
           Back to Feed
         </button>
@@ -167,7 +161,7 @@ const Blog: React.FC<BlogProps> = ({ isFullPage = false }) => {
               <NeuralLoadingIllustration />
             ) : (
               <div className="space-y-12">
-                 <div className="whitespace-pre-wrap text-gray-300 leading-relaxed text-lg font-light tracking-wide">{selectedPost.content}</div>
+                 <div className="whitespace-pre-wrap text-gray-300 leading-relaxed text-lg font-light tracking-wide prose prose-invert max-w-none">{selectedPost.content}</div>
                  
                  {sources.length > 0 && (
                    <div className="mt-12 pt-12 border-t border-white/5">
@@ -175,12 +169,7 @@ const Blog: React.FC<BlogProps> = ({ isFullPage = false }) => {
                      <ul className="flex flex-wrap gap-3">
                        {sources.map((source, idx) => (
                          <li key={idx}>
-                           <a 
-                             href={source.uri} 
-                             target="_blank" 
-                             rel="noopener noreferrer" 
-                             className="px-4 py-2 glass-dark rounded-xl text-[10px] font-black text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all border border-white/5 block"
-                           >
+                           <a href={source.uri} target="_blank" rel="noopener noreferrer" className="px-4 py-2 glass-dark rounded-xl text-[10px] font-black text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all border border-white/5 block">
                              {source.title || "External Source"}
                            </a>
                          </li>
@@ -195,8 +184,8 @@ const Blog: React.FC<BlogProps> = ({ isFullPage = false }) => {
           <section className="pt-20 border-t border-white/5 space-y-12">
             <h3 className="text-3xl font-black tracking-tighter">Discussion ({selectedPost.comments.length})</h3>
             <form onSubmit={handleAddComment} className="space-y-4">
-              <input value={userName} onChange={e => setUserName(e.target.value)} placeholder="Node Identifier" className="w-full bg-white/5 border border-white/10 p-6 rounded-2xl focus:outline-none focus:border-indigo-500/50 transition-all text-sm font-bold placeholder:text-gray-700" />
-              <textarea value={commentText} onChange={e => setCommentText(e.target.value)} placeholder="Synthesize feedback..." className="w-full h-40 bg-white/5 border border-white/10 p-6 rounded-2xl focus:outline-none focus:border-indigo-500/50 transition-all resize-none text-sm font-bold placeholder:text-gray-700" />
+              <input value={userName} onChange={e => setUserName(e.target.value)} placeholder="Node Identifier" className="w-full bg-white/5 border border-white/10 p-6 rounded-2xl focus:outline-none focus:border-indigo-500/50 transition-all text-sm font-bold placeholder:text-gray-700 text-white" />
+              <textarea value={commentText} onChange={e => setCommentText(e.target.value)} placeholder="Synthesize feedback..." className="w-full h-40 bg-white/5 border border-white/10 p-6 rounded-2xl focus:outline-none focus:border-indigo-500/50 transition-all resize-none text-sm font-bold placeholder:text-gray-700 text-white" />
               <button type="submit" className="px-12 py-5 bg-indigo-600 hover:bg-indigo-500 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all transform active:scale-95 shadow-2xl shadow-indigo-600/20 text-white">Commit Feedback</button>
             </form>
             <div className="space-y-6">
@@ -221,7 +210,7 @@ const Blog: React.FC<BlogProps> = ({ isFullPage = false }) => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {loading ? [1, 2, 3].map(i => <div key={i} className="glass p-10 h-[450px] rounded-[3rem] animate-pulse" />) :
+      {loading ? [1, 2, 3, 4, 5, 6].map(i => <div key={i} className="glass p-10 h-[450px] rounded-[3rem] animate-pulse" />) :
         posts.map(post => (
           <div key={post.id} onClick={() => handlePostClick(post)} className="glass p-10 rounded-[3rem] cursor-pointer hover:border-indigo-500/50 transition-all flex flex-col justify-between group h-full hover:bg-white/5 border border-white/5">
             <div className="space-y-6">
