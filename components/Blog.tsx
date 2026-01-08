@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -40,6 +39,42 @@ const Blog: React.FC<BlogProps> = ({ isFullPage = false }) => {
   const [sources, setSources] = useState<Source[]>([]);
   const [commentText, setCommentText] = useState('');
   const [userName, setUserName] = useState('');
+
+  // Dynamic Metadata Sync
+  useEffect(() => {
+    const updateMetaTags = (title: string, description: string) => {
+      document.title = title;
+      
+      const setMeta = (name: string, content: string, attr: 'name' | 'property' = 'name') => {
+        let el = document.querySelector(`meta[${attr}="${name}"]`);
+        if (!el) {
+          el = document.createElement('meta');
+          el.setAttribute(attr, name);
+          document.head.appendChild(el);
+        }
+        el.setAttribute('content', content);
+      };
+
+      setMeta('description', description);
+      setMeta('og:title', title, 'property');
+      setMeta('og:description', description, 'property');
+      setMeta('twitter:title', title, 'property');
+      setMeta('twitter:description', description, 'property');
+    };
+
+    if (selectedPost) {
+      updateMetaTags(
+        `${selectedPost.title} | Kev O'Wino Journal`,
+        selectedPost.summary
+      );
+    } else {
+      // Revert to professional baseline
+      updateMetaTags(
+        "Kev O'Wino | Senior Full-Stack Engineer",
+        "Specialized in high-performance web applications and AI-driven solutions."
+      );
+    }
+  }, [selectedPost]);
 
   useEffect(() => {
     const fetchPosts = async () => {

@@ -8,6 +8,7 @@ import AIAssistant from '../components/AIAssistant';
 import { PROJECTS, SKILLS, BIO } from '../data';
 import { SectionId } from '../types';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell } from 'recharts';
+import { motion } from 'framer-motion';
 
 interface HomePageProps {
   onNavigate: (view: 'home' | 'blog') => void;
@@ -30,31 +31,51 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[160px] pointer-events-none" />
           
           <div className="max-w-5xl w-full text-center space-y-12 relative z-10">
-            <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-black/40 backdrop-blur-xl rounded-full border border-white/5 mx-auto">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-3 px-6 py-2.5 bg-black/40 backdrop-blur-xl rounded-full border border-white/5 mx-auto"
+            >
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </span>
               <span className="text-[10px] font-black tracking-[0.25em] uppercase text-gray-400">Engineering Performance 24/7</span>
-            </div>
+            </motion.div>
             
-            <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] text-white">
+            <motion.h1 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] text-white"
+            >
               Architecting <br />
               <span className="gradient-text italic">Digital</span> Ops.
-            </h1>
+            </motion.h1>
             
-            <p className="text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.4 }}
+              className="text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed"
+            >
               Senior Software Engineer crafting high-fidelity user experiences and scalable backend infrastructures.
-            </p>
+            </motion.p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8"
+            >
               <button onClick={() => scrollTo(SectionId.Projects)} className="w-full sm:w-auto px-12 py-5 bg-white text-black font-black rounded-2xl hover:bg-gray-200 transition-all shadow-[0_20px_40px_rgba(255,255,255,0.1)] active:scale-95 text-center uppercase tracking-widest text-xs">
                 View Portfolio
               </button>
               <button onClick={() => scrollTo(SectionId.Contact)} className="w-full sm:w-auto px-12 py-5 glass border border-white/10 text-white font-black rounded-2xl hover:border-indigo-500/50 transition-all active:scale-95 text-center uppercase tracking-widest text-xs">
                 Contact Now
               </button>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -62,7 +83,13 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <section id={SectionId.About} className="py-40 px-6 scroll-mt-20">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
-              <div className="relative group">
+              <motion.div 
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="relative group"
+              >
                 <div className="absolute -inset-10 bg-indigo-500/10 rounded-[4rem] blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
                 <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl border border-white/5 aspect-[4/5] glass p-2">
                   <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-transparent z-20" />
@@ -76,12 +103,19 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                      <p className="text-xs font-bold text-indigo-400 uppercase tracking-widest">Lead Engineer @ Nairobi</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
               
               <div className="space-y-12">
                 <div className="space-y-6">
                   <h2 className="text-indigo-400 font-mono tracking-[0.4em] text-[10px] uppercase font-black">01 / The Vision</h2>
-                  <h3 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]">Beyond the <span className="text-indigo-500 italic">Interface</span>.</h3>
+                  <motion.h3 
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]"
+                  >
+                    Beyond the <span className="text-indigo-500 italic">Interface</span>.
+                  </motion.h3>
                   <p className="text-xl text-gray-400 leading-relaxed font-light">
                     {BIO.about}
                   </p>
@@ -140,23 +174,42 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   <h3 className="text-6xl md:text-8xl font-black tracking-tighter">Tools of Trade.</h3>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                  {SKILLS.map(skill => (
-                    <div key={skill.name} className="glass p-8 rounded-[2rem] flex flex-col gap-6 group hover:border-indigo-500/50 transition-all border border-white/5 hover:bg-white/5">
+                  {SKILLS.map((skill, index) => (
+                    <motion.div 
+                      key={skill.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="glass p-8 rounded-[2rem] flex flex-col gap-6 group hover:border-indigo-500/50 transition-all border border-white/5 hover:bg-white/5"
+                    >
                       <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center font-black text-xs text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">
                         {skill.name.slice(0, 1)}
                       </div>
                       <div className="space-y-1">
                         <span className="text-xs font-black uppercase tracking-widest text-white">{skill.name}</span>
                         <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                           <div className="h-full bg-indigo-500 transition-all duration-1000 group-hover:w-full" style={{ width: `${skill.level}%` }} />
+                           <motion.div 
+                              className="h-full bg-indigo-500"
+                              initial={{ width: 0 }}
+                              whileInView={{ width: `${skill.level}%` }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 1.5, ease: "easeOut", delay: (index * 0.1) + 0.3 }}
+                           />
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
 
-              <div className="glass p-12 rounded-[4rem] h-[550px] border border-white/5 relative overflow-hidden flex flex-col justify-center">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="glass p-12 rounded-[4rem] h-[550px] border border-white/5 relative overflow-hidden flex flex-col justify-center"
+              >
                 <div className="absolute top-0 right-0 p-12 opacity-5">
                    <h4 className="text-[120px] font-black leading-none">Proficiency</h4>
                 </div>
@@ -170,13 +223,13 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                         contentStyle={{ background: '#030712', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', padding: '15px' }}
                         cursor={{ fill: 'rgba(255,255,255,0.02)' }} 
                       />
-                      <Bar dataKey="level" radius={[20, 20, 0, 0]} barSize={40}>
+                      <Bar dataKey="level" radius={[20, 20, 0, 0]} barSize={40} animationDuration={2000}>
                         {SKILLS.map((entry, index) => <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#6366f1' : '#a855f7'} />)}
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
