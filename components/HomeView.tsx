@@ -1,3 +1,4 @@
+
 'use client';
 
 import React from 'react';
@@ -7,31 +8,38 @@ import AIAssistant from './AIAssistant';
 import { PROJECTS, SKILLS, BIO } from '../data';
 import { SectionId } from '../types';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Twitter, Instagram, Facebook } from 'lucide-react';
+import { Github, Linkedin, Twitter, Instagram, Facebook, ArrowRight, Code, Zap, Globe } from 'lucide-react';
 
+const SocialLinks = () => (
+  <div className="flex items-center gap-5">
+    {[
+      { icon: Github, href: BIO.socials.github, label: 'GitHub' },
+      { icon: Linkedin, href: BIO.socials.linkedin, label: 'LinkedIn' },
+      { icon: Twitter, href: BIO.socials.twitter, label: 'Twitter' },
+      { icon: Instagram, href: BIO.socials.instagram, label: 'Instagram' },
+      { icon: Facebook, href: BIO.socials.facebook, label: 'Facebook' }
+    ].map((social, i) => (
+      <motion.a
+        key={i}
+        href={social.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.1 * i }}
+        className="p-3 glass rounded-xl text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all hover:-translate-y-1 group"
+        title={social.label}
+      >
+        <social.icon size={18} className="group-hover:scale-110 transition-transform" />
+      </motion.a>
+    ))}
+  </div>
+);
+
+// Added missing interface definition for HomeView component props
 interface HomeViewProps {
   onNavigate: (view: 'home' | 'blog') => void;
 }
-
-const SocialLinks = () => (
-  <div className="flex items-center gap-6">
-    <a href={BIO.socials.github} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-xl text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all hover:-translate-y-1" title="GitHub">
-      <Github size={18} />
-    </a>
-    <a href={BIO.socials.linkedin} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-xl text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all hover:-translate-y-1" title="LinkedIn">
-      <Linkedin size={18} />
-    </a>
-    <a href={BIO.socials.twitter} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-xl text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all hover:-translate-y-1" title="Twitter">
-      <Twitter size={18} />
-    </a>
-    <a href={BIO.socials.instagram} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-xl text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all hover:-translate-y-1" title="Instagram">
-      <Instagram size={18} />
-    </a>
-    <a href={BIO.socials.facebook} target="_blank" rel="noopener noreferrer" className="p-3 glass rounded-xl text-gray-400 hover:text-white hover:border-indigo-500/50 transition-all hover:-translate-y-1" title="Facebook">
-      <Facebook size={18} />
-    </a>
-  </div>
-);
 
 export default function HomeView({ onNavigate }: HomeViewProps) {
   const scrollTo = (id: string) => {
@@ -44,96 +52,122 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
       <Navbar currentView="home" onNavigate={onNavigate} />
 
       <main className="mesh-gradient">
+        {/* Hero Section */}
         <section id={SectionId.Hero} className="min-h-screen flex flex-col items-center justify-center px-6 pt-20 relative overflow-hidden">
-          <div className="absolute top-[20%] left-[10%] w-[500px] h-[500px] bg-indigo-600/5 rounded-full blur-[160px] pointer-events-none" />
-          <div className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[160px] pointer-events-none" />
+          <div className="absolute top-[15%] left-[5%] w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[180px] pointer-events-none animate-pulse" />
+          <div className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[180px] pointer-events-none animate-pulse" />
           
-          <div className="max-w-5xl w-full text-center space-y-12 relative z-10">
+          <div className="max-w-6xl w-full text-center space-y-12 relative z-10">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-3 px-6 py-2.5 bg-black/40 backdrop-blur-xl rounded-full border border-white/5 mx-auto"
+              className="inline-flex items-center gap-3 px-6 py-2.5 bg-white/5 backdrop-blur-3xl rounded-full border border-white/10 mx-auto"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-500"></span>
               </span>
-              <span className="text-[10px] font-black tracking-[0.25em] uppercase text-gray-400">Self-taught Software Developer</span>
+              <span className="text-[10px] font-black tracking-[0.3em] uppercase text-indigo-400">Next-Gen Engineering</span>
             </motion.div>
             
             <motion.h1 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-7xl md:text-9xl font-black tracking-tighter leading-[0.85] text-white"
+              initial={{ opacity: 0, filter: 'blur(10px)' }}
+              animate={{ opacity: 1, filter: 'blur(0px)' }}
+              transition={{ duration: 1, ease: 'easeOut' }}
+              className="text-7xl md:text-[10rem] font-black tracking-tighter leading-[0.8] text-white"
             >
-              Building <br />
-              <span className="gradient-text italic">The Web</span>.
+              CRAFTING <br />
+              <span className="gradient-text italic">DIGITAL DNA</span>.
             </motion.h1>
             
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.4 }}
-              className="text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed"
+              transition={{ duration: 1.2, delay: 0.5 }}
+              className="text-xl md:text-3xl text-gray-400 max-w-3xl mx-auto font-light leading-relaxed tracking-tight"
             >
-              Kev Owino. A developer driven by curiosity and a commitment to crafting high-fidelity digital experiences.
+              Kev Owino. Architectural precision meets raw creativity. Elevating web ecosystems through high-fidelity code.
             </motion.p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-8">
-              <a href={BIO.socials.github} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-12 py-5 bg-white text-black font-black rounded-2xl hover:bg-gray-200 transition-all shadow-[0_20px_40px_rgba(255,255,255,0.1)] active:scale-95 text-center uppercase tracking-widest text-xs flex items-center justify-center gap-2">
-                <Github size={16} /> GitHub Profile
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-10"
+            >
+              <a href={BIO.socials.github} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-12 py-6 bg-white text-black font-black rounded-2xl hover:bg-gray-100 transition-all shadow-[0_30px_60px_rgba(255,255,255,0.15)] active:scale-95 text-center uppercase tracking-widest text-[11px] flex items-center justify-center gap-3">
+                <Github size={18} /> Deep Dive
               </a>
-              <button onClick={() => scrollTo(SectionId.Projects)} className="w-full sm:w-auto px-12 py-5 glass border border-white/10 text-white font-black rounded-2xl hover:border-indigo-500/50 transition-all active:scale-95 text-center uppercase tracking-widest text-xs">
-                View Projects
+              <button onClick={() => scrollTo(SectionId.Projects)} className="w-full sm:w-auto px-12 py-6 glass border border-white/10 text-white font-black rounded-2xl hover:border-indigo-500/50 hover:bg-indigo-500/5 transition-all active:scale-95 text-center uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 group">
+                Works <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </button>
-            </div>
+            </motion.div>
           </div>
+
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5 }}
+            className="absolute bottom-12 flex flex-col items-center gap-3 text-gray-600 animate-bounce"
+          >
+            <span className="text-[10px] font-black uppercase tracking-[0.5em]">Scroll</span>
+            <div className="w-px h-12 bg-gradient-to-b from-indigo-500 to-transparent" />
+          </motion.div>
         </section>
 
-        <section id={SectionId.About} className="py-40 px-6 scroll-mt-20">
+        {/* Identity Section */}
+        <section id={SectionId.About} className="py-52 px-6 scroll-mt-20 relative">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
               <motion.div 
-                initial={{ opacity: 0, x: -50 }}
+                initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="relative group"
+                className="relative group perspective-1000"
               >
-                <div className="absolute -inset-10 bg-indigo-500/10 rounded-[4rem] blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl border border-white/5 aspect-[4/5] glass p-2">
+                <div className="absolute -inset-10 bg-indigo-500/5 rounded-[5rem] blur-[120px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                <div className="relative z-10 rounded-[3.5rem] overflow-hidden shadow-2xl border border-white/5 aspect-[4/5] glass p-2 transition-transform duration-700 group-hover:scale-[1.02]">
                   <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-transparent z-20" />
                   
-                  {/* Persona: Portrait of an African man */}
-                  <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?auto=format&fit=crop&q=80&w=800" alt="Kev Owino" className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-700" />
+                  <img src="https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?auto=format&fit=crop&q=80&w=800" alt="Kev Owino" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" />
                   
-                  {/* Cyber-Neural Glow Effects */}
                   <div className="absolute inset-0 pointer-events-none z-25">
                      <div className="w-full h-full relative">
-                        {/* Red eye glows - calibrated for this specific image face position */}
-                        <div className="absolute top-[34.8%] left-[43.5%] w-2 h-1.5 bg-red-600/80 rounded-full blur-[4px] animate-pulse shadow-[0_0_12px_#dc2626] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                        <div className="absolute top-[34.8%] left-[55.2%] w-2 h-1.5 bg-red-600/80 rounded-full blur-[4px] animate-pulse shadow-[0_0_12px_#dc2626] [animation-delay:0.3s] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-                        
-                        {/* Secondary neural flicker */}
-                        <div className="absolute top-[34.8%] left-[43.5%] w-1 h-1 bg-white rounded-full blur-[1px] opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
-                        <div className="absolute top-[34.8%] left-[55.2%] w-1 h-1 bg-white rounded-full blur-[1px] opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
+                        <div className="absolute top-[34.8%] left-[43.5%] w-2 h-1.5 bg-indigo-500/80 rounded-full blur-[4px] animate-pulse shadow-[0_0_15px_#6366f1] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                        <div className="absolute top-[34.8%] left-[55.2%] w-2 h-1.5 bg-indigo-500/80 rounded-full blur-[4px] animate-pulse shadow-[0_0_15px_#6366f1] [animation-delay:0.3s] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
                      </div>
                   </div>
 
-                  <div className="absolute bottom-10 left-10 z-30 text-white">
-                     <h4 className="text-3xl font-black">Kev Owino</h4>
-                     <p className="text-xs font-bold text-indigo-400 uppercase tracking-widest">Self-taught Dev @ Nairobi</p>
+                  <div className="absolute bottom-12 left-12 z-30 text-white space-y-1">
+                     <h4 className="text-4xl font-black tracking-tighter">Kev Owino</h4>
+                     <div className="flex items-center gap-3">
+                        <span className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse" />
+                        <p className="text-[11px] font-black text-indigo-400 uppercase tracking-[0.3em]">Neural Architect @ Nairobi</p>
+                     </div>
                   </div>
                 </div>
               </motion.div>
               
-              <div className="space-y-12">
-                <div className="space-y-6">
-                  <h2 className="text-indigo-400 font-mono tracking-[0.4em] text-[10px] uppercase font-black">01 / The Vision</h2>
-                  <h3 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9]">Engineering <br /><span className="text-indigo-500 italic">Curiosity</span>.</h3>
-                  <p className="text-xl text-gray-400 leading-relaxed font-light">{BIO.about}</p>
+              <div className="space-y-14">
+                <div className="space-y-8">
+                  <h2 className="text-indigo-500 font-mono tracking-[0.5em] text-[11px] uppercase font-black flex items-center gap-4">
+                    <span className="w-12 h-px bg-indigo-500/30" /> 01 / Identity
+                  </h2>
+                  <h3 className="text-6xl md:text-9xl font-black tracking-tighter leading-[0.85]">Evolving <br /><span className="text-white italic">Self-Taught</span>.</h3>
+                  <p className="text-2xl text-gray-400 leading-relaxed font-light tracking-tight">{BIO.about}</p>
                   
-                  <div className="pt-6">
+                  <div className="grid grid-cols-2 gap-8 pt-6">
+                    <div className="space-y-2">
+                       <span className="text-[10px] font-black uppercase text-gray-500 tracking-widest">Foundation</span>
+                       <p className="text-white font-bold">freeCodeCamp Core</p>
+                    </div>
+                    <div className="space-y-2">
+                       <span className="text-[10px] font-black uppercase text-gray-500 tracking-widest">Base</span>
+                       <p className="text-white font-bold">Nairobi, Kenya</p>
+                    </div>
+                  </div>
+
+                  <div className="pt-8">
                     <SocialLinks />
                   </div>
                 </div>
@@ -142,35 +176,55 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
           </div>
         </section>
 
-        <section id={SectionId.Projects} className="py-40 px-6 bg-[#050914]/50 relative scroll-mt-20">
+        {/* Works Section */}
+        <section id={SectionId.Projects} className="py-52 px-6 bg-[#050914]/40 relative scroll-mt-20">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-12 text-white">
-              <div className="space-y-6">
-                 <h2 className="text-indigo-400 font-mono tracking-[0.4em] text-[10px] uppercase font-black">02 / Selected Works</h2>
-                 <h3 className="text-6xl md:text-8xl font-black tracking-tighter">Case Studies</h3>
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-32 gap-12 text-white">
+              <div className="space-y-8">
+                 <h2 className="text-indigo-500 font-mono tracking-[0.5em] text-[11px] uppercase font-black flex items-center gap-4">
+                    <span className="w-12 h-px bg-indigo-500/30" /> 02 / Portfolio
+                 </h2>
+                 <h3 className="text-7xl md:text-9xl font-black tracking-tighter leading-none">Selected Works</h3>
               </div>
-              <p className="text-gray-500 max-w-sm text-lg font-light leading-relaxed border-l-2 border-indigo-500/30 pl-8">Focused on high-availability systems with pixel-perfect UI.</p>
+              <div className="max-w-xs space-y-6">
+                 <p className="text-gray-500 text-lg font-light leading-relaxed">Synthesis of architectural stability and experimental interaction models.</p>
+                 <div className="h-px w-20 bg-indigo-500/50" />
+              </div>
             </div>
             <BentoGrid projects={PROJECTS} />
           </div>
         </section>
 
-        <section id={SectionId.Skills} className="py-40 px-6 scroll-mt-20">
+        {/* Stack Section */}
+        <section id={SectionId.Skills} className="py-52 px-6 scroll-mt-20">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 items-center">
-              <div className="space-y-16">
-                <div className="space-y-6 text-white">
-                  <h2 className="text-indigo-400 font-mono tracking-[0.4em] text-[10px] uppercase font-black">03 / Tech Stack</h2>
-                  <h3 className="text-6xl md:text-8xl font-black tracking-tighter">Tools of Trade.</h3>
+              <div className="space-y-20">
+                <div className="space-y-8 text-white">
+                  <h2 className="text-indigo-500 font-mono tracking-[0.5em] text-[11px] uppercase font-black flex items-center gap-4">
+                    <span className="w-12 h-px bg-indigo-500/30" /> 03 / Capabilities
+                  </h2>
+                  <h3 className="text-7xl md:text-9xl font-black tracking-tighter leading-none">Tech Stack.</h3>
+                  <p className="text-gray-500 text-xl font-light">Modular tools for a modern paradigm.</p>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-8">
                   {SKILLS.map((skill, index) => (
-                    <motion.div key={skill.name} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass p-8 rounded-[2rem] flex flex-col gap-6 group hover:border-indigo-500/50 transition-all border border-white/5 hover:bg-white/5">
-                      <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center font-black text-xs text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-all">{skill.name.slice(0, 1)}</div>
-                      <div className="space-y-1">
-                        <span className="text-xs font-black uppercase tracking-widest text-white">{skill.name}</span>
-                        <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                           <motion.div className="h-full bg-indigo-500" initial={{ width: 0 }} whileInView={{ width: `${skill.level}%` }} viewport={{ once: true }} transition={{ duration: 1.5, ease: "easeOut", delay: (index * 0.1) + 0.3 }} />
+                    <motion.div 
+                      key={skill.name} 
+                      initial={{ opacity: 0, y: 30 }} 
+                      whileInView={{ opacity: 1, y: 0 }} 
+                      viewport={{ once: true }} 
+                      transition={{ delay: index * 0.05 }}
+                      className="glass p-10 rounded-[2.5rem] flex flex-col gap-10 group hover:border-indigo-500/50 transition-all border border-white/5 hover:bg-white/5 overflow-hidden relative"
+                    >
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-600/5 blur-3xl rounded-full -mr-12 -mt-12 group-hover:bg-indigo-600/10 transition-colors" />
+                      <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center font-black text-sm text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-xl">
+                        {skill.name.slice(0, 1)}
+                      </div>
+                      <div className="space-y-4">
+                        <span className="text-xs font-black uppercase tracking-[0.2em] text-white">{skill.name}</span>
+                        <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                           <motion.div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500" initial={{ width: 0 }} whileInView={{ width: `${skill.level}%` }} viewport={{ once: true }} transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }} />
                         </div>
                       </div>
                     </motion.div>
@@ -182,17 +236,31 @@ export default function HomeView({ onNavigate }: HomeViewProps) {
         </section>
       </main>
 
-      <footer className="py-20 px-6 border-t border-white/5 bg-[#010309] flex flex-col md:flex-row justify-between items-center gap-10">
-        <div className="flex flex-col gap-6 items-start">
-           <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center font-black text-white text-xs">KO</div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-gray-500 italic">Engineering Premium Ops.</p>
-           </div>
-           <SocialLinks />
-        </div>
-        <div className="flex flex-col items-center md:items-end gap-2">
-           <p className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">© {new Date().getFullYear()} Kev Owino Portfolio V2.1.0</p>
-           <p className="text-[8px] font-mono text-indigo-500/40 uppercase tracking-[0.3em]">Built with Neural Precision</p>
+      {/* Modern Footer */}
+      <footer className="py-24 px-6 border-t border-white/5 bg-[#010309] relative overflow-hidden">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-16 relative z-10">
+          <div className="flex flex-col gap-8 items-center md:items-start">
+             <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-indigo-600 rounded-[1.2rem] flex items-center justify-center font-black text-white text-sm shadow-2xl shadow-indigo-600/30">KO</div>
+                <div className="flex flex-col">
+                   <p className="text-xs font-black uppercase tracking-[0.4em] text-white">Kev Owino</p>
+                   <p className="text-[10px] font-bold text-indigo-500/60 uppercase tracking-widest italic">Digital Architect</p>
+                </div>
+             </div>
+             <SocialLinks />
+          </div>
+          
+          <div className="flex flex-col items-center md:items-end gap-3">
+             <div className="flex gap-10 text-gray-500 text-[10px] font-black uppercase tracking-[0.3em] mb-4">
+                <button onClick={() => scrollTo(SectionId.Hero)} className="hover:text-white transition-colors">Identity</button>
+                <button onClick={() => scrollTo(SectionId.Projects)} className="hover:text-white transition-colors">Works</button>
+                <button onClick={() => onNavigate('blog')} className="hover:text-white transition-colors">Journal</button>
+             </div>
+             <p className="text-[10px] font-mono text-gray-600 uppercase tracking-widest">© {new Date().getFullYear()} Kev Owino Portfolio V2.2.0</p>
+             <p className="text-[9px] font-mono text-indigo-500/30 uppercase tracking-[0.5em] flex items-center gap-2">
+               <Zap size={10} /> Synthesized via Gemini 3
+             </p>
+          </div>
         </div>
       </footer>
 

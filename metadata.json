@@ -1,8 +1,5 @@
 {
   "name": "Kev Owino - Software Developer",
   "description": "A high-performance, polished developer portfolio of Kev Owino, a self-taught software developer focused on modern web engineering.",
-  "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ]
+  "requestFramePermissions": []
 }

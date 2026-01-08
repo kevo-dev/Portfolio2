@@ -1,8 +1,9 @@
-
 'use client';
 
 import React from 'react';
 import { Project } from '../types';
+import { motion } from 'framer-motion';
+import { ExternalLink, Github } from 'lucide-react';
 
 interface BentoGridProps {
   projects: Project[];
@@ -10,65 +11,82 @@ interface BentoGridProps {
 
 const BentoGrid: React.FC<BentoGridProps> = ({ projects }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[280px] md:auto-rows-[320px]">
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 auto-rows-[300px] md:auto-rows-[350px]">
       {projects.map((project, index) => {
         const isFeatured = project.featured;
         const colSpan = isFeatured ? 'md:col-span-8' : 'md:col-span-4';
         const rowSpan = isFeatured ? 'md:row-span-2' : 'md:row-span-1';
 
         return (
-          <div 
+          <motion.div 
             key={project.id}
-            className={`${colSpan} ${rowSpan} relative group overflow-hidden rounded-[2.5rem] glass border-white/5 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(79,70,229,0.15)]`}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1 }}
+            className={`${colSpan} ${rowSpan} relative group overflow-hidden rounded-[3rem] glass border-white/10 transition-all duration-700 hover:shadow-[0_40px_100px_rgba(79,70,229,0.15)] bg-black/40`}
           >
-            {/* Background Image with Parallax-like effect */}
-            <div className="absolute inset-0 w-full h-full overflow-hidden">
+            {/* Background Image Container */}
+            <div className="absolute inset-0 w-full h-full">
                <img 
                 src={project.imageUrl} 
                 alt={project.title}
-                className="absolute inset-0 w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 opacity-30 group-hover:opacity-40 grayscale group-hover:grayscale-0"
+                className="absolute inset-0 w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-40"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-[#030712]/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-[#030712]/60 to-transparent" />
+            </div>
+
+            {/* Top Bar (Featured Indicator) */}
+            <div className="absolute top-8 left-8 z-20 flex gap-2">
+              {isFeatured && (
+                <span className="px-3 py-1 bg-indigo-600 text-white text-[9px] font-black uppercase tracking-widest rounded-full shadow-lg">
+                  Featured
+                </span>
+              )}
             </div>
 
             {/* Content Overlay */}
-            <div className="absolute inset-0 p-8 flex flex-col justify-end">
-              <div className="flex flex-wrap gap-2 mb-4">
+            <div className="absolute inset-0 p-10 flex flex-col justify-end z-10">
+              <div className="flex flex-wrap gap-2 mb-6">
                 {project.tags.map(tag => (
-                  <span key={tag} className="px-3 py-1 bg-white/5 backdrop-blur-xl rounded-full text-[9px] font-bold tracking-[0.15em] text-indigo-300 border border-white/10 uppercase">
+                  <span key={tag} className="px-4 py-1.5 bg-white/5 backdrop-blur-2xl rounded-full text-[10px] font-black tracking-widest text-indigo-400 border border-white/10 uppercase">
                     {tag}
                   </span>
                 ))}
               </div>
               
-              <div className="space-y-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                <h3 className="text-2xl md:text-3xl font-black text-white group-hover:text-indigo-400 transition-colors">
+              <div className="space-y-4 group-hover:translate-y-[-10px] transition-transform duration-500">
+                <h3 className="text-3xl md:text-5xl font-black text-white leading-[1.1] tracking-tighter">
                   {project.title}
                 </h3>
-                <p className="text-gray-400 text-sm md:text-base mb-4 max-w-lg line-clamp-2 font-light leading-relaxed">
+                <p className="text-gray-400 text-base md:text-lg mb-6 max-w-xl font-light leading-relaxed line-clamp-2">
                   {project.description}
                 </p>
                 
-                <div className="flex items-center gap-6 opacity-0 group-hover:opacity-100 transition-all duration-500 pt-2">
-                  <a href={project.link} className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-white group/btn" aria-label={`View demo for ${project.title}`}>
-                    Launch Demo 
-                    <svg className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
+                <div className="flex items-center gap-8 opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+                  <a 
+                    href={project.link} 
+                    className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] text-white hover:text-indigo-400 transition-colors group/link"
+                    aria-label={`Launch ${project.title}`}
+                  >
+                    Launch <ExternalLink size={14} className="group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
                   </a>
                   {project.github && (
-                    <a href={project.github} className="text-xs font-black uppercase tracking-widest text-gray-500 hover:text-white transition-colors">Github</a>
+                    <a 
+                      href={project.github} 
+                      className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] text-gray-500 hover:text-white transition-colors group/git"
+                    >
+                      Source <Github size={14} className="group-hover/git:scale-110 transition-transform" />
+                    </a>
                   )}
                 </div>
               </div>
             </div>
             
-            {/* Decorative Corner Accent */}
-            <div className="absolute top-0 right-0 p-8 opacity-20 group-hover:opacity-100 transition-opacity">
-               <div className="w-1.5 h-1.5 bg-indigo-500 rounded-full" />
-            </div>
-          </div>
+            {/* Visual Flare */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[60px] rounded-full -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+          </motion.div>
         );
       })}
     </div>
