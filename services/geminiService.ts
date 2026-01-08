@@ -7,14 +7,13 @@ import { BIO } from "../data";
  * Built to be highly reliable and technically opinionated.
  */
 
-const getAI = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
-
 /**
  * Handles chat interactions with the Kev-AI persona.
  */
 export const getGeminiResponse = async (userMessage: string): Promise<string> => {
   try {
-    const ai = getAI();
+    // Initializing a new Gemini client instance for each request to ensure configuration consistency
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: userMessage,
@@ -47,7 +46,8 @@ export const getGeminiResponse = async (userMessage: string): Promise<string> =>
  */
 export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
   try {
-    const ai = getAI();
+    // Initializing a new Gemini client instance for each request
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const prompt = `Research and synthesize the top 6 most consequential software engineering stories of the last 24 hours. 
     Focus on breakthroughs in: AI Systems, Framework Architectures (React/Next), TypeScript advancements, or Distributed Systems.
     Output MUST be a JSON array of objects.`;
@@ -92,7 +92,8 @@ export const getLiveBlogPosts = async (): Promise<BlogPost[]> => {
  */
 export const expandBlogPost = async (post: BlogPost): Promise<{ content: string; sources: any[] }> => {
   try {
-    const ai = getAI();
+    // Initializing a new Gemini client instance for each request
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     const prompt = `Perform an architectural deep-dive analysis for the following event: "${post.title}".
     Summary: ${post.summary}
     

@@ -1,6 +1,6 @@
 {
   "name": "kev-owino-portfolio",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -17,7 +17,7 @@
     "lucide-react": "0.475.0",
     "clsx": "2.1.1",
     "tailwind-merge": "3.0.1",
-    "framer-motion": "11.13.1"
+    "framer-motion": "11.15.0"
   },
   "devDependencies": {
     "typescript": "5.7.3",

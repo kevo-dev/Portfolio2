@@ -13,13 +13,16 @@ interface State {
   hasError: boolean;
 }
 
-// Fixed ErrorBoundary by using React.Component directly to ensure property inheritance and type inference for 'props' are correctly resolved
-class ErrorBoundary extends React.Component<Props, State> {
+/**
+ * Standard React Error Boundary component.
+ * Uses the Component class from React to manage UI failures gracefully and ensure prop types are correctly inherited.
+ */
+class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false
   };
 
-  // Explicit constructor helps ensure props are correctly initialized and typed in the class context
+  // Explicit constructor ensures props are correctly initialized in the base Component class
   constructor(props: Props) {
     super(props);
   }
@@ -50,7 +53,7 @@ class ErrorBoundary extends React.Component<Props, State> {
       );
     }
 
-    // Accessing children from props, which is inherited from the React.Component base class
+    // Accessing children from this.props which is inherited from Component<Props, State>
     return this.props.children;
   }
 }
